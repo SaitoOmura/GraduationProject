@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{67ddd622-ddfb-4203-9c3e-c66235a3a689}</ProjectGuid>
+    <ProjectGuid>{7a89d75e-1331-4c82-805d-c37aea4596c7}</ProjectGuid>
     <RootNamespace>GraduationProject</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -132,6 +132,49 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AppMain.cpp" />
+    <ClCompile Include="Utility\Camera.cpp" />
+    <ClCompile Include="Object\Character\Enemy\EnemyBase.cpp" />
+    <ClCompile Include="Object\Character\Player\Attack\Beam.cpp" />
+    <ClCompile Include="Object\Character\Player\Player.cpp" />
+    <ClCompile Include="Object\Character\CharaBase.cpp" />
+    <ClCompile Include="Object\GameObject.cpp" />
+    <ClCompile Include="Object\Character\Player\Attack\Player_Attack.cpp" />
+    <ClCompile Include="Scenes\End\EndScene.cpp" />
+    <ClCompile Include="Scenes\InGame\InGameScene.cpp" />
+    <ClCompile Include="Scenes\Result\ResultScene.cpp" />
+    <ClCompile Include="Scenes\SceneManager.cpp" />
+    <ClCompile Include="Scenes\Title\TitleScene.cpp" />
+    <ClCompile Include="Object\Terrain\Terrain_Base.cpp" />
+    <ClCompile Include="Utility\Collision.cpp" />
+    <ClCompile Include="Utility\Input\InputManager.cpp" />
+    <ClCompile Include="Utility\ProjectConfig.cpp" />
+    <ClCompile Include="Utility\ResourceManager.cpp" />
+    <ClCompile Include="Utility\Vector2D.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Application.h" />
+    <ClInclude Include="Utility\Camera.h" />
+    <ClInclude Include="Object\Character\Enemy\EnemyBase.h" />
+    <ClInclude Include="Object\Character\Player\Attack\Beam.h" />
+    <ClInclude Include="Object\Character\Player\Player.h" />
+    <ClInclude Include="Object\Character\CharaBase.h" />
+    <ClInclude Include="Object\GameObject.h" />
+    <ClInclude Include="Object\GameObjectManager.h" />
+    <ClInclude Include="Object\Character\Player\Attack\Player_Attack.h" />
+    <ClInclude Include="Scenes\End\EndScene.h" />
+    <ClInclude Include="Scenes\InGame\InGameScene.h" />
+    <ClInclude Include="Scenes\Result\ResultScene.h" />
+    <ClInclude Include="Scenes\SceneBase.h" />
+    <ClInclude Include="Scenes\SceneFactory.h" />
+    <ClInclude Include="Scenes\SceneManager.h" />
+    <ClInclude Include="Scenes\Title\TitleScene.h" />
+    <ClInclude Include="Object\Terrain\Terrain_Base.h" />
+    <ClInclude Include="Utility\Collision.h" />
+    <ClInclude Include="Utility\Input\InputManager.h" />
+    <ClInclude Include="Utility\ProjectConfig.h" />
+    <ClInclude Include="Utility\ResourceManager.h" />
+    <ClInclude Include="Utility\Singleton.h" />
+    <ClInclude Include="Utility\Vector2D.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
