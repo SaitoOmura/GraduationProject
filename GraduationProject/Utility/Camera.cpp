@@ -25,8 +25,8 @@ void Camera::Update(float delta_second)
 // 描画処理
 void Camera::Draw()
 {
-	DrawFormatString(location.x - size.x / 2, 0, 0xffffff, "カメラ座標: %f", location.x);
-	DrawFormatString(location.x - size.x / 2, 20, 0xffffff, "プレイヤー座標: %f", player->GetLocation().x);
+	DrawFormatString(0, 100, 0xffffff, "カメラ座標: %f", location.x);
+	DrawFormatString(0, 120, 0xffffff, "プレイヤー座標: %f", player->GetLocation().x);
 }
 
 void Camera::Scroll(float delta_second)
