@@ -15,7 +15,6 @@ protected:
 	float				hp;			//オブジェクトのHP
 	double				angle;		//画像の角度
 	double				img_size;	//画像の大きさ
-	bool				time_stop;	//停止中かどうか
 	bool				active;		//使用中かどうか
 	int					layer;		//重なり
 
@@ -28,7 +27,6 @@ public:
 		hp(0.0f),
 		angle(0.0),
 		img_size(1.0),
-		time_stop(false),
 		active(true),
 		layer(0)
 	{
@@ -88,10 +86,15 @@ public:
 	const virtual int GetHP() const;
 
 	/// <summary>
-	/// 時間停止
+	/// 非アクティブ化
 	/// </summary>
-	/// <param name="t">停止するかどうか</param>
-	void Stop(bool t);
+	void DeActivate();
+
+	/// <summary>
+	/// アクティブ化
+	/// </summary>
+	/// <param name="Location">アクティブ座標</param>
+	void Activate(Vector2D Location);
 
 	/// <summary>
 	/// ダメージ処理
@@ -116,7 +119,5 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	virtual const int GetLayer() const;
-
-	const bool IsStop() const;
 };
 

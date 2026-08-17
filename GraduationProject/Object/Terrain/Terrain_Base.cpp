@@ -4,6 +4,7 @@
 void Terrain_Base::Initialize()
 {
 	collision.box_size = 64.0f;
+	collision.object_type = eObjectType::Terrain;
 }
 
 // çXêVèàóù
@@ -18,7 +19,10 @@ void Terrain_Base::Draw(Vector2D c_pos) const
 
 #if _DEBUG
 	Vector2D half = location / 2;
-	DrawBoxAA(location.x - half.x, location.y - half.y, location.x + half.x, location.y + half.y, 0x88ff44, true);
+	Vector2D d_pos = c_pos - location;
+	d_pos.x = D_WIN_MAX_X / 2 - d_pos.x;
+	d_pos.y = D_WIN_MAX_Y / 2 - d_pos.y;
+	DrawBoxAA(d_pos.x - half.x, d_pos.y - half.y, d_pos.x + half.x, d_pos.y + half.y, 0x88ff44, false);
 
 #endif // DEBUG
 

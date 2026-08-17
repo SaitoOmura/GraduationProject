@@ -2,6 +2,7 @@
 
 #include "../SceneBase.h"
 #include "../../Object/Character/Player/Player.h"
+#include "../../Object/Terrain/Terrain_Base.h"
 
 
 
@@ -55,5 +56,16 @@ public:
 private:
 	void EffectControl(const float& delta_second);
 	void AnimationControl(const float& delta_second);
+
+	/// <summary>
+	/// マップチップ読み込み
+	/// </summary>
+	/// <param name="stage">読み込むステージ</param>
+	void Load_Map(int stage);
+
+	/// <summary>
+	/// マップチップからステージ生成
+	/// </summary>
+	void Create_Map();
 };
 

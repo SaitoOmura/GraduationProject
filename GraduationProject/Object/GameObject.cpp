@@ -86,9 +86,18 @@ const int GameObject::GetHP() const
 	return this->hp;
 }
 
-void GameObject::Stop(bool t)
+// 非アクティブ化
+void GameObject::DeActivate()
 {
-	time_stop = t;
+	location = -100;
+	active = false;
+}
+
+// アクティブ化
+void GameObject::Activate(Vector2D Location)
+{
+	location = Location;
+	active = true;
 }
 
 void GameObject::Damage(float damage)
@@ -109,9 +118,4 @@ const double GameObject::GetAngle() const
 const int GameObject::GetLayer() const
 {
 	return layer;
-}
-
-const bool GameObject::IsStop() const
-{
-	return time_stop;
 }
