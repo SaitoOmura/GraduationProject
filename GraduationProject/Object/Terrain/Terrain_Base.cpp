@@ -1,16 +1,24 @@
 #include "Terrain_Base.h"
+#include "../../Utility/Camera.h"
 
 // èâä˙âªèàóù
 void Terrain_Base::Initialize()
 {
-	collision.box_size = 64.0f;
+	collision.box_size = Vector2D(64.0f,64.0f);
 	collision.object_type = eObjectType::Terrain;
+	collision.is_blocking = false;
+	DeActivate();
 }
 
 // çXêVèàóù
 void Terrain_Base::Update(float delta_second)
 {
-
+	Camera* camera = Camera::GetInstance();
+	if (location.x > camera->GetLocation().x + camera->GetCameraSize().x / 2 ||
+		location.x < camera->GetLocation().x - camera->GetCameraSize().x / 2)
+	{
+		DeActivate();
+	}
 }
 
 // ï`âÊèàóù
@@ -18,11 +26,11 @@ void Terrain_Base::Draw(Vector2D c_pos) const
 {
 
 #if _DEBUG
-	Vector2D half = location / 2;
+	Vector2D half = collision.box_size / 2;
 	Vector2D d_pos = c_pos - location;
 	d_pos.x = D_WIN_MAX_X / 2 - d_pos.x;
 	d_pos.y = D_WIN_MAX_Y / 2 - d_pos.y;
-	DrawBoxAA(d_pos.x - half.x, d_pos.y - half.y, d_pos.x + half.x, d_pos.y + half.y, 0x88ff44, false);
+	DrawBoxAA(d_pos.x - half.x, d_pos.y - half.y, d_pos.x + half.x, d_pos.y + half.y, 0x88ff44, true);
 
 #endif // DEBUG
 
@@ -32,6 +40,23 @@ void Terrain_Base::Draw(Vector2D c_pos) const
 void Terrain_Base::Finalize()
 {
 
+}
+
+bool Terrain_Base::Check_Loc(Vector2D loc)
+{
+	return location.x == loc.x;
+}
+
+void Terrain_Base::DeActivate()
+{
+	active = false;
+	collision.is_blocking = false;
+}
+
+void Terrain_Base::Activate()
+{
+	active = true;
+	collision.is_blocking = true;
 }
 
 // ìñÇΩÇËîªíËí ímèàóù

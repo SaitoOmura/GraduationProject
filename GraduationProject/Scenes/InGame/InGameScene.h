@@ -11,6 +11,7 @@ class InGameScene : public SceneBase
 private:
 	Player* player;
 	std::vector<std::vector<int>> map_chip;
+	std::vector<Terrain_Base*> terrain;
 
 public:
 	//コンストラクタ

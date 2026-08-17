@@ -53,6 +53,12 @@ public:
 
 	virtual void SetVelocity(Vector2D velo);
 
+	/// <summary>
+	/// 当たり判定通知処理
+	/// </summary>
+	/// <param name="hit_object">当たったゲームオブジェクトのポインタ</param>
+	virtual void OnHitCollision(GameObject* hit_object) override;
+
 private:
 	/// <summary>
 	/// 移動処理

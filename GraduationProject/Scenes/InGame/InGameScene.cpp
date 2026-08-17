@@ -13,6 +13,7 @@ void InGameScene::Initialize()
 	camera->Initialize();
 	camera->SetPlayer(player);
 	Load_Map(1);
+	Create_Map();
 	__super::Initialize();
 }
 
@@ -20,12 +21,17 @@ eSceneType InGameScene::Update(const float& delta_second)
 {
 	Camera* camera = Camera::GetInstance();
 	camera->Update(delta_second);
-
-	// オブジェクトマネージャーの情報を取得
-	GameObjectManager* object = GameObjectManager::GetInstance();
-	for (GameObject* obj : object->GetObjectsList(eObjectType::Terrain))
+	for (int i = 0; i < terrain.size(); i++)
 	{
-		
+		if (terrain[i]->IsActive())
+		{
+			continue;
+		}
+		if (terrain[i]->GetLocation().x <= camera->GetLocation().x + camera->GetCameraSize().x / 2 &&
+			terrain[i]->GetLocation().x >= camera->GetLocation().x - camera->GetCameraSize().x / 2)
+		{
+			terrain[i]->Activate();
+		}
 	}
 	return __super::Update(delta_second);
 }
@@ -36,7 +42,6 @@ void InGameScene::Draw() const
 	Camera* camera = Camera::GetInstance();
 	camera->Draw();
 	DrawFormatString(50, 50, 0xffffff, "InGame");
-	DrawBox(0, GAME_WIN_MAX_Y, D_WIN_MAX_X, D_WIN_MAX_Y, 0xffff88, TRUE);
 #endif
 
 	__super::Draw();
@@ -99,5 +104,19 @@ void InGameScene::Load_Map(int stage)
 
 void InGameScene::Create_Map()
 {
-
+	GameObjectManager* gm = GameObjectManager::GetInstance();
+	for (int y = 0; y < map_chip.size(); y++)
+	{
+		for (int x = 0; x < map_chip[y].size(); x++)
+		{
+			switch (map_chip[y][x])
+			{
+			case 1:
+				terrain.push_back(gm->CreateObject<Terrain_Base>(Vector2D(x * 64.0f, y * 64.0f)));
+				break;
+			default:
+				break;
+			}
+		}
+	}
 }

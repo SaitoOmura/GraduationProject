@@ -58,6 +58,16 @@ public:
 	/// <param name="Player">プレイヤーポイント</param>
 	void SetPlayer(Player* p);
 
+	/// <summary>
+	/// 座標取得
+	/// </summary>
+	/// <returns>カメラ中心座標</returns>
 	const Vector2D GetLocation() const;
+
+	/// <summary>
+	/// 画面サイズ
+	/// </summary>
+	/// <returns>カメラの画面の大きさ</returns>
+	const Vector2D GetCameraSize() const;
 };
 

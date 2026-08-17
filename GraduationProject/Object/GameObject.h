@@ -88,13 +88,13 @@ public:
 	/// <summary>
 	/// 非アクティブ化
 	/// </summary>
-	void DeActivate();
+	virtual void DeActivate();
 
 	/// <summary>
 	/// アクティブ化
 	/// </summary>
 	/// <param name="Location">アクティブ座標</param>
-	void Activate(Vector2D Location);
+	virtual void Activate(Vector2D Location);
 
 	/// <summary>
 	/// ダメージ処理

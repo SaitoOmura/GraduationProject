@@ -89,3 +89,8 @@ const Vector2D Camera::GetLocation() const
 {
 	return location;
 }
+
+const Vector2D Camera::GetCameraSize() const
+{
+	return size;
+}

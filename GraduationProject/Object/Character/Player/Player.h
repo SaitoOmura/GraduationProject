@@ -72,6 +72,8 @@ public:
 
 	const Vector2D GetVelocity() const;
 
+	virtual void OnHitCollision(GameObject* hit_object) override;
+
 private:
 	/// <summary>
 	/// ˆÚ“®ˆ—

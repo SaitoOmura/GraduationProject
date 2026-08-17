@@ -24,6 +24,12 @@ public:
 	/// </summary>
 	virtual void Finalize() override;
 
+	bool Check_Loc(Vector2D loc);
+
+	virtual void DeActivate() override;
+
+	virtual void Activate();
+
 public:
 	/// <summary>
 	/// “–‚½‚è”»’è’Ê’mˆ—

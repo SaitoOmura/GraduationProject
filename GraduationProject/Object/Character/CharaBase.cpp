@@ -29,6 +29,11 @@ void CharaBase::SetVelocity(Vector2D velo)
 	velocity = velo;
 }
 
+void CharaBase::OnHitCollision(GameObject* hit_object)
+{
+
+}
+
 void CharaBase::Movement(float delta_second)
 {
 

@@ -29,8 +29,8 @@ void SceneManager::Update(float delta_second)
 	// オブジェクトマネージャーの情報取得
 	GameObjectManager* object = GameObjectManager::GetInstance();
 	// オブジェクトリストを取得
-	std::vector<GameObject*> target_list = object->GetObjectsList(eObjectType::Player);
-	std::vector<GameObject*> partner_list = object->GetObjectsList(eObjectType::Terrain);
+	std::vector<GameObject*> target_list = object->GetObjectsList(eObjectType::Terrain);
+	std::vector<GameObject*> partner_list = object->GetObjectsList(eObjectType::Player);
 
 	// 当たり判定確認処理
 	for (int i = 0; i < target_list.size(); i++)
@@ -45,28 +45,28 @@ void SceneManager::Update(float delta_second)
 			{
 				continue;
 			}
-			CheckCollision(target_list[i], partner_list[j]);
+ 			CheckCollision(target_list[i], partner_list[j]);
 		}
 	}
 
-	target_list = object->GetObjectsList(eObjectType::Terrain);
-	partner_list = object->GetObjectsList(eObjectType::Enemy);
+	//target_list = object->GetObjectsList(eObjectType::Terrain);
+	//partner_list = object->GetObjectsList(eObjectType::Enemy);
 
-	for (int i = 0; i < target_list.size(); i++)
-	{
-		if (!target_list[i]->IsActive())
-		{
-			continue;
-		}
-		for (int j = 0; j < partner_list.size(); j++)
-		{
-			if (!partner_list[j]->IsActive())
-			{
-				continue;
-			}
-			CheckCollision(target_list[i], partner_list[j]);
-		}
-	}
+	//for (int i = 0; i < target_list.size(); i++)
+	//{
+	//	if (!target_list[i]->IsActive())
+	//	{
+	//		continue;
+	//	}
+	//	for (int j = 0; j < partner_list.size(); j++)
+	//	{
+	//		if (!partner_list[j]->IsActive())
+	//		{
+	//			continue;
+	//		}
+	//		CheckCollision(target_list[i], partner_list[j]);
+	//	}
+	//}
 
 	// 描画処理
 	Draw();
@@ -178,7 +178,7 @@ void SceneManager::CheckCollision(GameObject* target, GameObject* partner)
 			}
 			else
 			{
-				near_loc.x = Clamp(local.x, 0, -pc.box_size.x);
+				near_loc.x = Clamp(local.x, pc.box_size.x / 2, -pc.box_size.x / 2);
 				near_loc.y = Clamp(local.y, pc.box_size.y / 2, -pc.box_size.y / 2);
 			}
 

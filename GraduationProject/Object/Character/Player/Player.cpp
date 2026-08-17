@@ -7,8 +7,9 @@ void Player::Initialize()
 {
 	collision.object_type = eObjectType::Player;
 	collision.hit_object_type.push_back(eObjectType::Enemy);
+	collision.hit_object_type.push_back(eObjectType::Terrain);
 	collision.is_blocking = true;
-	collision.box_size = 32.0f;
+	collision.radius = 36.0f;
 	dash_period = DASH_DERAY;
 
 
@@ -65,11 +66,6 @@ void Player::Update(float delta_second)
 	Movement(delta_second);
 	Attack(delta_second);
 	location += velocity * delta_second * 140;
-	if (location.y >= 600.0f)
-	{
-		location.y = 600.0f;
-		jump = false;
-	}
 }
 
 // •`‰æˆ—
@@ -95,7 +91,8 @@ void Player::Draw(Vector2D c_pos) const
 		color = 0x00ff00;
 		break;
 	}
-	DrawBoxAA(d_pos.x - size.x, d_pos.y - size.y, d_pos.x + size.x, d_pos.y + size.y, color, true);
+	DrawCircle(d_pos.x, d_pos.y, collision.radius, color, true);
+	//DrawBoxAA(d_pos.x - size.x, d_pos.y - size.y, d_pos.x + size.x, d_pos.y + size.y, color, true);
 	DrawFormatString(20, 10, 0xffffff, "%f", velocity.x);
 }
 
@@ -103,6 +100,25 @@ void Player::Draw(Vector2D c_pos) const
 void Player::Finalize()
 {
 
+}
+
+void Player::OnHitCollision(GameObject* hit_object)
+{
+	if (hit_object->GetCollision().object_type == eObjectType::Terrain)
+	{
+		Vector2D dis = location - hit_object->GetLocation();
+		float diff = collision.radius + hit_object->GetCollision().box_size.x;
+		if (dis.x - diff <= 0.0f)
+		{
+			location.x += dis.x - diff;
+		}
+		if (dis.y - diff <= 0.0f)
+		{
+			location.y += dis.y - diff;
+			jump = false;
+		}
+
+	}
 }
 
 const bool Player::IsDash() const
@@ -160,7 +176,7 @@ void Player::Movement(float delta_second)
 			if (jump) velocity.y = -2.0f;
 			else
 			{
-				velocity.y = -3.0f;
+				velocity.y = -4.0f;
 				jump = true;
 			}
 		}
