@@ -12,6 +12,13 @@ enum class eObjectType : unsigned char
 	Terrain
 };
 
+enum class eCollisionType : unsigned char
+{
+	Box,
+	Circle,
+	Slope
+};
+
 class Collision
 {
 public:
@@ -20,6 +27,7 @@ public:
 	Vector2D					pivot;				//始点
 	eObjectType					object_type;		//自身のオブジェクトタイプ
 	std::vector<eObjectType>	hit_object_type;	//当たるオブジェクトタイプ
+	eCollisionType				collision_type;		//コリジョンの形
 	Vector2D					box_size;			//矩形のサイズ
 	
 public:

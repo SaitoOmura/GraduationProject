@@ -159,9 +159,9 @@ void SceneManager::CheckCollision(GameObject* target, GameObject* partner)
 	// “–‚½‚è”»’è‚ª—LŒø‚©Šm”F‚·‚é
 	if (tc.IsCheckHitTarget(pc.object_type) || pc.IsCheckHitTarget(tc.object_type))
 	{
-		if (pc.box_size.x > 0.0f && pc.box_size.y > 0.0f)
+		if (pc.collision_type == eCollisionType::Box)
 		{
-			if (tc.box_size.x > 0.0f && tc.box_size.y / 0.0f)
+			if (tc.collision_type == eCollisionType::Box)
 			{
 				Vector2D dis = target->GetLocation() - partner->GetLocation();
 				Vector2D diff = tc.box_size / 2 + pc.box_size / 2;

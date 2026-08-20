@@ -6,6 +6,7 @@
 void Player::Initialize()
 {
 	collision.object_type = eObjectType::Player;
+	collision.collision_type = eCollisionType::Box;
 	collision.hit_object_type.push_back(eObjectType::Enemy);
 	collision.hit_object_type.push_back(eObjectType::Terrain);
 	collision.is_blocking = true;

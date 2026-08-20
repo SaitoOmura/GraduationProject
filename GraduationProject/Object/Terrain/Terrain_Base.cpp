@@ -4,6 +4,7 @@
 // ‰Šú‰»ˆ—
 void Terrain_Base::Initialize()
 {
+	collision.collision_type = eCollisionType::Box;
 	collision.box_size = Vector2D(64.0f,64.0f);
 	collision.object_type = eObjectType::Terrain;
 	collision.is_blocking = false;

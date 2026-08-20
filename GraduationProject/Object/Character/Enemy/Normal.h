@@ -1,22 +1,9 @@
 #pragma once
 
-#include "../CharaBase.h"
+#include "EnemyBase.h"
 
-enum EnemyType
+class Normal : public EnemyBase
 {
-	normal,
-	fly,
-	fire,
-	beam,
-	sword
-};
-
-
-class EnemyBase : public CharaBase
-{
-protected:
-	EnemyType e_type;
-
 public:
 	/// <summary>
 	/// ‰Šú‰»ˆ—
