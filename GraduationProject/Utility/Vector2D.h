@@ -98,5 +98,6 @@ public:
 
 	//intŒ^‚Ö•ÏŠ·
 	void ToInt(int* x, int* y) const;
+
 };
 

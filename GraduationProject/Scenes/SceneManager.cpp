@@ -161,39 +161,53 @@ void SceneManager::CheckCollision(GameObject* target, GameObject* partner)
 	{
 		if (pc.box_size.x > 0.0f && pc.box_size.y > 0.0f)
 		{
-			//矩形の中心点を原点とした円の相対位置
-			Vector2D ploc = target->GetLocation() - partner->GetLocation();
-			
-			//矩形の角度を0とした場合の円の相対位置
-			Vector2D local = 0.0f;
-			local.x = ploc.x * cosf(-partner->GetAngle()) - ploc.y * sinf(-partner->GetAngle());
-			local.y = ploc.x * sinf(-partner->GetAngle()) + ploc.y * cosf(-partner->GetAngle());
-
-			//clampを使って最近接点の確認
-			Vector2D near_loc = 0.0f;
-			if (current_scene->GetNowSceneType() == eSceneType::title)
+			if (tc.box_size.x > 0.0f && tc.box_size.y / 0.0f)
 			{
-				near_loc.x = Clamp(local.x, pc.box_size.x / 2, -pc.box_size.x / 2);
-				near_loc.y = Clamp(local.y, pc.box_size.y / 2, -pc.box_size.y / 2);
+				Vector2D dis = target->GetLocation() - partner->GetLocation();
+				Vector2D diff = tc.box_size / 2 + pc.box_size / 2;
+				if (fabs(dis.x) < fabs(diff.x) && fabs(dis.y) < fabs(diff.y))
+				{
+					target->OnHitCollision(partner);
+					partner->OnHitCollision(target);
+				}
+
 			}
 			else
 			{
-				near_loc.x = Clamp(local.x, pc.box_size.x / 2, -pc.box_size.x / 2);
-				near_loc.y = Clamp(local.y, pc.box_size.y / 2, -pc.box_size.y / 2);
+				//矩形の中心点を原点とした円の相対位置
+				Vector2D ploc = target->GetLocation() - partner->GetLocation();
+
+				//矩形の角度を0とした場合の円の相対位置
+				Vector2D local = 0.0f;
+				local.x = ploc.x * cosf(-partner->GetAngle()) - ploc.y * sinf(-partner->GetAngle());
+				local.y = ploc.x * sinf(-partner->GetAngle()) + ploc.y * cosf(-partner->GetAngle());
+
+				//clampを使って最近接点の確認
+				Vector2D near_loc = 0.0f;
+				if (current_scene->GetNowSceneType() == eSceneType::title)
+				{
+					near_loc.x = Clamp(local.x, pc.box_size.x / 2, -pc.box_size.x / 2);
+					near_loc.y = Clamp(local.y, pc.box_size.y / 2, -pc.box_size.y / 2);
+				}
+				else
+				{
+					near_loc.x = Clamp(local.x, pc.box_size.x / 2, -pc.box_size.x / 2);
+					near_loc.y = Clamp(local.y, pc.box_size.y / 2, -pc.box_size.y / 2);
+				}
+
+				Vector2D diff = local - near_loc;
+				float dis = diff.x * diff.x + diff.y * diff.y;
+
+				float rad = tc.radius * tc.radius;
+
+				if (dis > rad)
+				{
+					return;
+				}
+
+				target->OnHitCollision(partner);
+				partner->OnHitCollision(target);
 			}
-
-			Vector2D diff = local - near_loc;
-			float dis = diff.x * diff.x + diff.y * diff.y;
-			
-			float rad = tc.radius * tc.radius;
-
-			if (dis > rad)
-			{
-				return;
-			}
-
-			target->OnHitCollision(partner);
-			partner->OnHitCollision(target);
 		}
 		else
 		{

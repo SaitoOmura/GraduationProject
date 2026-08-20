@@ -33,6 +33,7 @@ private:
 	bool attack;
 	float hold_tick;
 	int ac;
+	float i_radi;
 
 public:
 	Player() :
@@ -44,7 +45,8 @@ public:
 		jump(false),
 		attack(false),
 		hold_tick(0.0f)
-	{};
+	{
+	};
 	~Player() {};
 
 public:
@@ -98,4 +100,5 @@ private:
 	/// </summary>
 	/// <param name="hit_object">1ƒtƒŒ[ƒ€‚ ‚½‚è‚ÌŠÔ</param>
 	virtual void EffectControl(Animation& anim, float delta_second);
+
 };
