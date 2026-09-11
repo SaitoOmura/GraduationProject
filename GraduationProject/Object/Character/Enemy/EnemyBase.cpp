@@ -29,10 +29,10 @@ void EnemyBase::Finalize()
 
 }
 
-void EnemyBase::SetEnemyType(EnemyType t)
-{
-	e_type = t;
-}
+//void EnemyBase::SetEnemyType(EnemyType t)
+//{
+//	e_type = t;
+//}
 
 void EnemyBase::Movement(float delta_second)
 {

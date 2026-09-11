@@ -21,6 +21,7 @@ void Player::Initialize()
 		bb.push_back(gm->CreateObject<Player_Attack>(0.0f));
 		bb[i]->Deactivate();
 	}
+	flip = false;
 	ac = 0;
 	now_abi = Ability::nomal;
 	state = State::idle;
@@ -187,10 +188,10 @@ void Player::Movement(float delta_second)
 		if (input->GetKeyState(KEY_INPUT_SPACE) == eInputState::Pressed ||
 			input->GetKeyState(KEY_INPUT_W) == eInputState::Pressed)
 		{
-			if (jump) velocity.y = -2.0f;
+			if (jump) velocity.y = -3.0f;
 			else
 			{
-				velocity.y = -4.0f;
+				velocity.y = -5.0f;
 				jump = true;
 			}
 		}

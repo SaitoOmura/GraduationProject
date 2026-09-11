@@ -8,12 +8,11 @@ void InGameScene::Initialize()
 {
 	Camera* camera = Camera::GetInstance();
 	GameObjectManager* gm = GameObjectManager::GetInstance();
-	player = gm->CreateObject<Player>(Vector2D(600, 200));
+	Load_Map(1);
+	Create_Map();
 	camera = Camera::GetInstance();
 	camera->Initialize();
 	camera->SetPlayer(player);
-	Load_Map(1);
-	Create_Map();
 	__super::Initialize();
 }
 
@@ -78,7 +77,7 @@ void InGameScene::Load_Map(int stage)
 	switch (stage)
 	{
 	case 1:
-		str = "Resource/csv/stage.csv";
+		str = "Resource/csv/stage1-1.csv";
 		break;
 	}
 	std::ifstream file(str);
@@ -114,6 +113,8 @@ void InGameScene::Create_Map()
 			case 1:
 				terrain.push_back(gm->CreateObject<Terrain_Base>(Vector2D(x * 64.0f, y * 64.0f)));
 				break;
+			case 4:
+				player = gm->CreateObject<Player>(Vector2D(x * 64.0f, y * 64.0f));
 			default:
 				break;
 			}
