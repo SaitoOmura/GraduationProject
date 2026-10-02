@@ -4,11 +4,11 @@
 
 enum EnemyType
 {
-	normal,
-	fly,
-	fire,
-	beam,
-	sword
+	e_normal,
+	e_fly,
+	e_fire,
+	e_beam,
+	e_sword
 };
 
 
@@ -16,6 +16,8 @@ class EnemyBase : public CharaBase
 {
 protected:
 	EnemyType e_type;
+	Vector2D init_loc;
+	float rad;
 
 public:
 	/// <summary>
@@ -35,6 +37,14 @@ public:
 	/// 終了時処理
 	/// </summary>
 	virtual void Finalize() override;
+
+	/// <summary>
+	/// 非アクティブ化
+	/// </summary>
+	virtual void DeActivate() override;
+
+
+	virtual void Activate();
 
 private:
 	/// <summary>

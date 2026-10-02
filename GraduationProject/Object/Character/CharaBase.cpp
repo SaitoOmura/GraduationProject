@@ -24,6 +24,11 @@ void CharaBase::Finalize()
 
 }
 
+void CharaBase::DeActivate()
+{
+	__super::DeActivate();
+}
+
 void CharaBase::SetVelocity(Vector2D velo)
 {
 	velocity = velo;

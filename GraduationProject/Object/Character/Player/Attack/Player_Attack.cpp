@@ -4,7 +4,9 @@
 // ‰Šú‰»ˆ—
 void Player_Attack::Initialize()
 {
-
+	collision.object_type = eObjectType::None;
+	collision.hit_object_type.push_back(eObjectType::Enemy);
+	collision.hit_object_type.push_back(eObjectType::Terrain);
 }
 
 // XVˆ—

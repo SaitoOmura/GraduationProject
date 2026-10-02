@@ -3,7 +3,9 @@
 // ‰Šú‰»ˆ—
 void EnemyBase::Initialize()
 {
-
+	collision.object_type = eObjectType::Enemy;
+	collision.hit_object_type.push_back(eObjectType::Player);
+	collision.hit_object_type.push_back(eObjectType::Terrain);
 }
 
 // XVˆ—
@@ -27,6 +29,16 @@ void EnemyBase::Draw(Vector2D c_pos) const
 void EnemyBase::Finalize()
 {
 
+}
+
+void EnemyBase::DeActivate()
+{
+	__super::DeActivate();
+}
+
+void EnemyBase::Activate()
+{
+	active = true;
 }
 
 //void EnemyBase::SetEnemyType(EnemyType t)

@@ -1,36 +1,11 @@
 #pragma once
 
-#include "../GameObject.h"
+#include "EnemyBase.h"
 
-#define GRAVITY (9.81)
-
-struct Animation
+class FlyEnemy : public EnemyBase
 {
-	float timer;
-	int	count;
-	int max_count;
-	bool active;
-};
-
-class CharaBase : public GameObject
-{
-protected:
-	Vector2D			velocity;		//移動量
-	std::vector<int>	effect_anim;	//エフェクト
-	std::vector<int>	animation;		//アニメーション
-	std::vector<int>	sounds;			//効果音
-	bool				flip;			//反転
-
-public:
-	CharaBase() :
-		velocity(),
-		effect_anim(),
-		animation(),
-		sounds(),
-		flip(false)
-	{};
-
-	~CharaBase() {};
+private:
+	float anim_timer;
 
 public:
 	/// <summary>
@@ -51,14 +26,6 @@ public:
 	/// </summary>
 	virtual void Finalize() override;
 
-	virtual void SetVelocity(Vector2D velo);
-
-	/// <summary>
-	/// 当たり判定通知処理
-	/// </summary>
-	/// <param name="hit_object">当たったゲームオブジェクトのポインタ</param>
-	virtual void OnHitCollision(GameObject* hit_object) override;
-
 	/// <summary>
 	/// 非アクティブ化
 	/// </summary>
@@ -69,23 +36,23 @@ private:
 	/// 移動処理
 	/// </summary>
 	/// <param name="hit_object">1フレームあたりの時間</param>
-	virtual void Movement(float delta_second);
+	virtual void Movement(float delta_second) override;
 
 	/// <summary>
 	/// 攻撃処理
 	/// </summary>
 	/// <param name="delta_second">1フレームあたりの時間</param>
-	virtual void Attack(float delta_second);
+	virtual void Attack(float delta_second) override;
 
 	/// <summary>
 	/// アニメーション制御処理
 	/// </summary>
 	/// <param name="hit_object">1フレームあたりの時間</param>
-	virtual void AnimationControl(Animation& anim, float delta_second);
+	virtual void AnimationControl(Animation& anim, float delta_second) override;
 	/// <summary>
 	/// エフェクト制御処理
 	/// </summary>
 	/// <param name="hit_object">1フレームあたりの時間</param>
-	virtual void EffectControl(Animation& anim, float delta_second);
+	virtual void EffectControl(Animation& anim, float delta_second) override;
 };
 

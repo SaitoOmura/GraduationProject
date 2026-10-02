@@ -32,6 +32,18 @@ eSceneType InGameScene::Update(const float& delta_second)
 			terrain[i]->Activate();
 		}
 	}
+	for (int i = 0; i < n_enemy.size(); i++)
+	{
+		if (n_enemy[i]->IsActive())
+		{
+			continue;
+		}
+		if (n_enemy[i]->GetLocation().x <= camera->GetLocation().x + camera->GetCameraSize().x / 2 &&
+			n_enemy[i]->GetLocation().x >= camera->GetLocation().x - camera->GetCameraSize().x / 2)
+		{
+			n_enemy[i]->Activate();
+		}
+	}
 	return __super::Update(delta_second);
 }
 
@@ -115,6 +127,13 @@ void InGameScene::Create_Map()
 				break;
 			case 4:
 				player = gm->CreateObject<Player>(Vector2D(x * 64.0f, y * 64.0f));
+				break;
+			case 5:
+				n_enemy.push_back(gm->CreateObject<Normal>(Vector2D(x * 64.0f, y * 64.0f)));
+				break;
+			case 6:
+				f_enemy.push_back(gm->CreateObject<FlyEnemy>(Vector2D(x * 64.0f, y * 64.0f)));
+				break;
 			default:
 				break;
 			}

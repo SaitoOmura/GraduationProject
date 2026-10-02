@@ -3,6 +3,8 @@
 #include "../SceneBase.h"
 #include "../../Object/Character/Player/Player.h"
 #include "../../Object/Terrain/Terrain_Base.h"
+#include "../../Object/Character/Enemy/Normal.h"
+#include "../../Object/Character/Enemy/FlyEnemy.h"
 
 
 
@@ -12,6 +14,8 @@ private:
 	Player* player;
 	std::vector<std::vector<int>> map_chip;
 	std::vector<Terrain_Base*> terrain;
+	std::vector<Normal*> n_enemy;
+	std::vector<FlyEnemy*>f_enemy;
 
 public:
 	//コンストラクタ
