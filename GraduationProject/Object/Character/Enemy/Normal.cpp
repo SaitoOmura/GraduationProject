@@ -5,7 +5,7 @@ void Normal::Initialize()
 {
 	active = false;
 	flip = false;
-	rad = 36.0f;
+	rad = 24.0f;
 	__super::Initialize();
 }
 
@@ -37,8 +37,8 @@ void Normal::Finalize()
 
 void Normal::Movement(float delta_second)
 {
-	if (flip)	velocity.x = 1.0f;
-	else velocity.x = -1.0f;
+	//if (flip)	velocity.x = 1.0f;
+	//else velocity.x = -1.0f;
 }
 
 // UŒ‚ˆ—

@@ -121,6 +121,15 @@ public:
 			break;
 		}
 	}
+	
+	/// <summary>
+	/// 生成予定リスト取得処理
+	/// </summary>
+	/// <returns>生成予定リスト</returns>
+	const std::vector<GameObject*>& GetCreateList() const
+	{
+		return create_objects;
+	}
 
 	/// <summary>
 	/// ゲームオブジェクト生成処理

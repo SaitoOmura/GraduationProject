@@ -7,11 +7,11 @@ void Camera::Initialize()
 
 
 	// スクリーンの初期サイズを設定
-	this->size.x = D_WIN_MAX_X;
-	this->size.y = D_WIN_MAX_Y;
+	this->size.x = GAME_WIN_MAX_X;
+	this->size.y = GAME_WIN_MAX_Y;
 
 	// カメラの初期座標を設定
-	this->location.x = 0  + (size.x / 2);
+	this->location.x = 0  + (D_WIN_MAX_X / 2);
 	this->location.y = size.y / 2;
 
 }

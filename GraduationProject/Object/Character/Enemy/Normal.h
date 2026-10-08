@@ -2,6 +2,14 @@
 
 #include "EnemyBase.h"
 
+enum type
+{
+	normal,
+	mush,
+	piyo,
+	bear
+};
+
 class Normal : public EnemyBase
 {
 public:

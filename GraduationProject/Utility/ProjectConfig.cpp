@@ -5,7 +5,7 @@
 bool ProjectConfig::DEBUG = false;
 
 // ステージサイズの初期化
-int ProjectConfig::STAGE_WIDTH = 3840;
+int ProjectConfig::STAGE_WIDTH = 2112;
 int ProjectConfig::STAGE_HEIGHT = 768;
 
 // エラー内容を出力する

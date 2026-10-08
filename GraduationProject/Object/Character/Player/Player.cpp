@@ -9,9 +9,10 @@ void Player::Initialize()
 	collision.collision_type = eCollisionType::Box;
 	collision.hit_object_type.push_back(eObjectType::Enemy);
 	collision.hit_object_type.push_back(eObjectType::Terrain);
+	collision.hit_object_type.push_back(eObjectType::Throgh);
 	collision.is_blocking = true;
-	collision.box_size = 36.0f;
-	i_radi = 36.0f;
+	collision.box_size = 24.0f;
+	i_radi = 24.0f;
 	dash_period = DASH_DERAY;
 
 

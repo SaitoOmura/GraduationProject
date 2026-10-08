@@ -16,7 +16,7 @@ void EnemyBase::Update(float delta_second)
 		return;
 	}
 	Movement(delta_second);
-	location = velocity * delta_second * 140.0f;
+	location += velocity * delta_second * 140.0f;
 }
 
 // •`‰æˆ—

@@ -9,7 +9,7 @@ void InGameScene::Initialize()
 	Camera* camera = Camera::GetInstance();
 	GameObjectManager* gm = GameObjectManager::GetInstance();
 	Load_Map(1);
-	Create_Map();
+	Create_Map(1);
 	camera = Camera::GetInstance();
 	camera->Initialize();
 	camera->SetPlayer(player);
@@ -42,6 +42,18 @@ eSceneType InGameScene::Update(const float& delta_second)
 			n_enemy[i]->GetLocation().x >= camera->GetLocation().x - camera->GetCameraSize().x / 2)
 		{
 			n_enemy[i]->Activate();
+		}
+	}
+	for (int i = 0; i < f_enemy.size(); i++)
+	{
+		if (f_enemy[i]->IsActive())
+		{
+			continue;
+		}
+		if (f_enemy[i]->GetLocation().x <= camera->GetLocation().x + camera->GetCameraSize().x / 2 &&
+			f_enemy[i]->GetLocation().x >= camera->GetLocation().x - camera->GetCameraSize().x / 2)
+		{
+			f_enemy[i]->Activate();
 		}
 	}
 	return __super::Update(delta_second);
@@ -107,36 +119,116 @@ void InGameScene::Load_Map(int stage)
 		std::string val;
 
 		while (std::getline(ss, val,',')) {
-			row.push_back(std::stoi(val)); // 文字列をintに変換
+			row.push_back(std::stoi(val)); // 文字列を1つずつ int に変換
 		}
 		map_chip.push_back(row);
 	}
 }
 
-void InGameScene::Create_Map()
+void InGameScene::Create_Map(int stage)
 {
+	int w = 0;
+	int h = 0;
 	GameObjectManager* gm = GameObjectManager::GetInstance();
 	for (int y = 0; y < map_chip.size(); y++)
 	{
+		h++;
 		for (int x = 0; x < map_chip[y].size(); x++)
 		{
+			w++;
 			switch (map_chip[y][x])
 			{
-			case 1:
+			case 1://地面
 				terrain.push_back(gm->CreateObject<Terrain_Base>(Vector2D(x * 64.0f, y * 64.0f)));
 				break;
-			case 4:
+			case 2://斜面
+				break;
+			case 3://壁
+				break;
+			case 4://通り抜ける壁
+				break;
+			case 5://ブロック
+				break;
+			case 6://プレイヤー
 				player = gm->CreateObject<Player>(Vector2D(x * 64.0f, y * 64.0f));
 				break;
-			case 5:
+			case 7://雑魚敵1
 				n_enemy.push_back(gm->CreateObject<Normal>(Vector2D(x * 64.0f, y * 64.0f)));
 				break;
-			case 6:
+			case 8://飛ぶ敵
 				f_enemy.push_back(gm->CreateObject<FlyEnemy>(Vector2D(x * 64.0f, y * 64.0f)));
+				break;
+			case 9://扉
+				break;
+			case 10://スター
 				break;
 			default:
 				break;
 			}
 		}
+	}
+	GameObjectManager* object = GameObjectManager::GetInstance();
+	float shift_x = (D_WIN_MAX_X - GAME_WIN_MAX_X) / 2;
+	for (GameObject* obj : object->GetCreateList())
+	{
+		obj->SetLocation(Vector2D(obj->GetLocation().x + shift_x, obj->GetLocation().y));
+	}
+
+	w /= h;
+	ProjectConfig::STAGE_HEIGHT = h * 64.0f;
+	ProjectConfig::STAGE_WIDTH = (w * 64.0f) + shift_x;
+
+	std::string str;
+
+	str = "Resource/csv/stage1_gate.csv";
+
+	std::ifstream file(str);
+	if (!file.is_open())
+	{
+		throw (str + "がありません\n");
+	}
+
+	std::string line;
+	// 1行ずつ読み込み
+	while (std::getline(file, line)) {
+		// ここで1行分のデータを処理
+		std::vector<int> row;
+		std::stringstream ss(line);
+		std::string val;
+
+		while (std::getline(ss, val, ',')) {
+			row.push_back(std::stoi(val));
+		}
+
+	}
+}
+
+void InGameScene::Load_Enemy(int stage)
+{
+	std::string str;
+	switch (stage)
+	{
+	case 1:
+		str = "Resource/csv/stage1_enemy.csv";
+		break;
+	}
+	std::ifstream file(str);
+	if (!file.is_open())
+	{
+		throw (str + "がありません\n");
+	}
+
+	std::string line;
+	// 1行ずつ読み込み
+	while (std::getline(file, line)) {
+		// ここで1行分のデータを処理
+		std::vector<int> row;
+		std::stringstream ss(line);
+		std::string val;
+
+		while (std::getline(ss, val, ',')) {
+			row.push_back(std::stoi(val)); // 文字列をintに変換
+		}
+		enemy_pos.push_back(row);
 	}
 }

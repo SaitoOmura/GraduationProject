@@ -5,6 +5,7 @@
 #include "../../Object/Terrain/Terrain_Base.h"
 #include "../../Object/Character/Enemy/Normal.h"
 #include "../../Object/Character/Enemy/FlyEnemy.h"
+#include "../../Object/Gate/Gate.h"
 
 
 
@@ -13,9 +14,11 @@ class InGameScene : public SceneBase
 private:
 	Player* player;
 	std::vector<std::vector<int>> map_chip;
+	std::vector<std::vector<int>> enemy_pos;
 	std::vector<Terrain_Base*> terrain;
 	std::vector<Normal*> n_enemy;
 	std::vector<FlyEnemy*>f_enemy;
+	std::vector<Gate*> gate;
 
 public:
 	//コンストラクタ
@@ -71,6 +74,8 @@ private:
 	/// <summary>
 	/// マップチップからステージ生成
 	/// </summary>
-	void Create_Map();
+	void Create_Map(int stage);
+
+	void Load_Enemy(int stage);
 };
 

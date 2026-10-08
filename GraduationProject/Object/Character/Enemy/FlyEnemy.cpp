@@ -45,10 +45,10 @@ void FlyEnemy::DeActivate()
 
 void FlyEnemy::Movement(float delta_second)
 {
-	if (flip)	velocity.x = 1.0f;
-	else velocity.x = -1.0f;
+	if (flip)	velocity.x = 0.5f;
+	else velocity.x = -0.5f;
 	anim_timer += delta_second;
-	velocity.y = sinf(anim_timer * 1.2f) * 0.8f;
+	velocity.y = sinf(anim_timer * 2.5f) * 1.0f;
 }
 
 // UŒ‚ˆ—

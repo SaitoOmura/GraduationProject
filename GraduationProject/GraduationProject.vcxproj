@@ -132,8 +132,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AppMain.cpp" />
+    <ClCompile Include="Object\Gate\Gate.cpp" />
     <ClCompile Include="Object\Character\Enemy\FlyEnemy.cpp" />
     <ClCompile Include="Object\Character\Enemy\Normal.cpp" />
+    <ClCompile Include="Object\Terrain\Through_floor.cpp" />
     <ClCompile Include="Utility\Camera.cpp" />
     <ClCompile Include="Object\Character\Enemy\EnemyBase.cpp" />
     <ClCompile Include="Object\Character\Player\Attack\Beam.cpp" />
@@ -152,11 +154,14 @@
     <ClCompile Include="Utility\ProjectConfig.cpp" />
     <ClCompile Include="Utility\ResourceManager.cpp" />
     <ClCompile Include="Utility\Vector2D.cpp" />
+    <ClCompile Include="Object\Terrain\Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
+    <ClInclude Include="Object\Gate\Gate.h" />
     <ClInclude Include="Object\Character\Enemy\FlyEnemy.h" />
     <ClInclude Include="Object\Character\Enemy\Normal.h" />
+    <ClInclude Include="Object\Terrain\Through_floor.h" />
     <ClInclude Include="Utility\Camera.h" />
     <ClInclude Include="Object\Character\Enemy\EnemyBase.h" />
     <ClInclude Include="Object\Character\Player\Attack\Beam.h" />
@@ -179,6 +184,7 @@
     <ClInclude Include="Utility\ResourceManager.h" />
     <ClInclude Include="Utility\Singleton.h" />
     <ClInclude Include="Utility\Vector2D.h" />
+    <ClInclude Include="Object\Terrain\Wall.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
