@@ -123,6 +123,7 @@ void Player_Attack::Deactivate()
 	active = false;
 	location = 0.0f;
 	fir = false;
+	collision.is_blocking = false;
 }
 
 void Player_Attack::Activate(Vector2D loc, bool f)
@@ -130,6 +131,7 @@ void Player_Attack::Activate(Vector2D loc, bool f)
 	active = true;
 	location = loc;
 	flip = f;
+	collision.is_blocking = true;
 }
 
 void Player_Attack::Charge(Vector2D loc, float time, bool f)

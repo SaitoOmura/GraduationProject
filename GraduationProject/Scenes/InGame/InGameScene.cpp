@@ -105,7 +105,7 @@ eSceneType InGameScene::Update(const float& delta_second)
 	std::vector<GameObject*> obj_list = gm->GetObjectsList(eObjectType::None);
 	for (GameObject* obj : obj_list)
 	{
-		if (obj->GetHP() <= 0)
+		if (obj->GetHP() <= 0 && obj->IsActive())
 		{
 			obj->DeActivate();
 		}

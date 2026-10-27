@@ -15,6 +15,7 @@ class Terrain_Base : public GameObject
 private:
 	TerrainType t_type;
 	Vector2D velocity;
+	bool test;
 
 public:
 	/// <summary>

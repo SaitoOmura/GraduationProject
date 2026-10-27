@@ -80,6 +80,7 @@ void Terrain_Base::DeActivate()
 
 void Terrain_Base::Activate()
 {
+
 	active = true;
 	collision.is_blocking = true;
 }
@@ -99,33 +100,31 @@ void Terrain_Base::OnHitCollision(GameObject* hit_object)
 {
 	if (hit_object->GetCollision().object_type == eObjectType::Player_Attack && t_type == TerrainType::block)
 	{
-		if (hit_object->GetCollision().object_type == eObjectType::Player_Attack)
+
+		switch (dynamic_cast<Player_Attack*>(hit_object)->GetAbilityType())
 		{
-			switch (dynamic_cast<Player_Attack*>(hit_object)->GetAbilityType())
-			{
-			case Ability::normal:
-			{
-				GameObjectManager* gm = GameObjectManager::GetInstance();
-				std::vector<GameObject*> p = gm->GetObjectsList(eObjectType::Player);
-				// プレイヤーの口元へ向かう方向
-				Vector2D direction = p[0]->GetLocation() - location;
+		case Ability::normal:
+		{
+			GameObjectManager* gm = GameObjectManager::GetInstance();
+			std::vector<GameObject*> p = gm->GetObjectsList(eObjectType::Player);
+			// プレイヤーの口元へ向かう方向
+			Vector2D direction = p[0]->GetLocation() - location;
 
-				float length = sqrt(
-					direction.x * direction.x +
-					direction.y * direction.y
-				);
+			float length = sqrt(
+				direction.x * direction.x +
+				direction.y * direction.y
+			);
 
-				// 方向を正規化
-				direction.x /= length;
-				direction.y /= length;
+			// 方向を正規化
+			direction.x /= length;
+			direction.y /= length;
 
-				velocity = direction * 4;
-				break;
-			}
-			default:
-				hp--;
-				break;
-			}
+			velocity = direction * 4;
+			break;
+		}
+		default:
+			hp--;
+			break;
 		}
 	}
 }

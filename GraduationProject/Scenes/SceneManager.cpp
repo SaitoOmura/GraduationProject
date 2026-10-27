@@ -52,10 +52,17 @@ void SceneManager::Update(float delta_second)
 					pc.object_type == eObjectType::Player_Attack)
 				{
 					Vector2D dis = all_list[i]->GetLocation() - all_list[j]->GetLocation();
-					if (fabsf(dis.x) <= 100.0f && fabs(dis.y) <= 100.0f)
+					if (fabsf(dis.x) <= 150.0f && fabs(dis.y) <= 150.0f)
 					{
+						if (!all_list[i]->IsActive())
+						{
+							all_list[i]->Activate(all_list[i]->GetLocation());
+						}
 						CheckCollision(all_list[i], all_list[j]);
-						all_list[i]->Activate(all_list[i]->GetLocation());
+					}
+					else if (all_list[i]->IsActive())
+					{
+						all_list[i]->DeActivate();
 					}
 				}
 			}

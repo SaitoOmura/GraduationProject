@@ -91,13 +91,19 @@ void GameObject::DeActivate()
 {
 	location = -100;
 	active = false;
+	collision.is_blocking = false;
 }
 
 // アクティブ化
 void GameObject::Activate(Vector2D Location)
 {
+	if (hp <= 0)
+	{
+		return;
+	}
 	location = Location;
 	active = true;
+	collision.is_blocking = true;
 }
 
 void GameObject::Damage(float damage)
