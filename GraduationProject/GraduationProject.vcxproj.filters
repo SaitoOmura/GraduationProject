@@ -60,9 +60,6 @@
     <ClCompile Include="Object\Character\Player\Attack\Player_Attack.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Object\Character\Player\Attack\Beam.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Object\Character\Enemy\EnemyBase.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -76,12 +73,6 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Object\Character\Enemy\FlyEnemy.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\Terrain\Wall.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\Terrain\Through_floor.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Object\Gate\Gate.cpp">
@@ -146,9 +137,6 @@
     <ClInclude Include="Object\Character\Player\Attack\Player_Attack.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Object\Character\Player\Attack\Beam.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Object\Character\Enemy\EnemyBase.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -162,12 +150,6 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Object\Character\Enemy\FlyEnemy.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\Terrain\Wall.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\Terrain\Through_floor.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Object\Gate\Gate.h">

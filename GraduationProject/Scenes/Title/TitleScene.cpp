@@ -4,6 +4,7 @@
 void TitleScene::Initialize()
 {
 	__super::Initialize();
+	data.stage_num = 1;
 }
 
 eSceneType TitleScene::Update(const float& delta_second)

@@ -2,22 +2,18 @@
 
 #include "../CharaBase.h"
 #include "Attack/Player_Attack.h"
+#include "../../Gate/Gate.h"
 
-#define DASH_DERAY (0.1f)
-
-enum Ability
-{
-	nomal,
-	beam,
-	sword
-};
+#define DASH_DERAY (0.2f)
 
 enum State
 {
 	idle,
 	walk,
 	attack,
-	jump
+	jump,
+	inhale,
+	damage
 };
 
 class Player : public CharaBase
@@ -25,6 +21,7 @@ class Player : public CharaBase
 private:
 	Ability now_abi;
 	State state;
+	Ability hold_enemy;
 	std::vector<Player_Attack*> bb;
 	float dash_period;
 	bool dash_prep;
@@ -33,11 +30,14 @@ private:
 	bool attack;
 	float hold_tick;
 	int ac;
-	float i_radi;
+	bool hold;
+	float motion_time;
+	bool warp;
+	GateID gate_id;
 
 public:
 	Player() :
-		now_abi(Ability::nomal),
+		now_abi(Ability::normal),
 		state(State::idle),
 		dash_period(0.0f),
 		dash_prep(false),
@@ -76,7 +76,27 @@ public:
 
 	virtual void OnHitCollision(GameObject* hit_object) override;
 
+	void SetAbility(Ability ability);
+
+	Ability GetAbility() const;
+
+	void SetLife(float life);
+
+	GateID GetGateId() const;
+
+	bool IsWarp() const;
+
 private:
+	/// <summary>
+	/// ’Z‰Ÿ‚µUŒ‚
+	/// </summary>
+	void Attack_Push();
+
+	/// <summary>
+	/// ’·‰Ÿ‚µUŒ‚
+	/// </summary>
+	void Attack_Hold(float delta_second);
+
 	/// <summary>
 	/// ˆÚ“®ˆ—
 	/// </summary>
@@ -100,5 +120,4 @@ private:
 	/// </summary>
 	/// <param name="hit_object">1ƒtƒŒ[ƒ€‚ ‚½‚è‚ÌŠÔ</param>
 	virtual void EffectControl(Animation& anim, float delta_second);
-
 };

@@ -10,10 +10,17 @@ enum class GateID
 	Stage4
 };
 
+enum class GateType
+{
+	gate,
+	star
+};
+
 class Gate : public GameObject
 {
 private:
 	GateID id;
+	GateType g_type;
 public:
 	/// <summary>
 	/// 初期化処理
@@ -32,6 +39,10 @@ public:
 	/// 終了時処理
 	/// </summary>
 	virtual void Finalize() override;
+
+	void SetGateType(GateType type);
+
+	GateType GetGateType() const;
 
 public:
 	/// <summary>
@@ -66,11 +77,10 @@ public:
 	/// <summary>
 	/// アクティブ化
 	/// </summary>
-	/// <param name="Location">アクティブ座標</param>
-	virtual void Activate(Vector2D Location) override;
+	void Activate();
 
-	//void SetGateID(GateID gate_id);
+	void SetGateID(GateID gate_id);
 
-	//const GateID GetGateID();
+	const GateID GetGateID();
 };
 

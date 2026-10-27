@@ -5,10 +5,17 @@
 enum EnemyType
 {
 	e_normal,
-	e_fly,
 	e_fire,
 	e_beam,
 	e_sword
+};
+
+enum EnemyState
+{
+	e_Idle,
+	e_Damage,
+	e_Attack,
+	e_Move
 };
 
 
@@ -17,7 +24,9 @@ class EnemyBase : public CharaBase
 protected:
 	EnemyType e_type;
 	Vector2D init_loc;
-	float rad;
+	EnemyState e_state;
+	bool inhaling;
+	bool is_live;
 
 public:
 	/// <summary>
@@ -45,6 +54,22 @@ public:
 
 
 	virtual void Activate();
+
+	virtual EnemyType GetEnemyType() const;
+
+	/// <summary>
+	/// 当たり判定通知処理
+	/// </summary>
+	/// <param name="hit_object">当たったゲームオブジェクトのポインタ</param>
+	virtual void OnHitCollision(GameObject* hit_object) override;
+
+	virtual Vector2D GetInitLoc() const;
+
+	virtual void SetLocation(const Vector2D& location) override;
+
+	virtual void OutArea();
+
+	virtual bool Is_Alive() const;
 
 private:
 	/// <summary>

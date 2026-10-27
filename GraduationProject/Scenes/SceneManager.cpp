@@ -28,45 +28,51 @@ void SceneManager::Update(float delta_second)
 
 	// オブジェクトマネージャーの情報取得
 	GameObjectManager* object = GameObjectManager::GetInstance();
-	// オブジェクトリストを取得
-	std::vector<GameObject*> target_list = object->GetObjectsList(eObjectType::Terrain);
-	std::vector<GameObject*> partner_list = object->GetObjectsList(eObjectType::Player);
 
-	// 当たり判定確認処理
-	for (int i = 0; i < target_list.size(); i++)
+	std::vector<GameObject*> all_list = object->GetObjectsList(eObjectType::None);
+
+	for (int i = 0; i < all_list.size(); i++)
 	{
-		if (!target_list[i]->IsActive())
+		if (!all_list[i]->IsActive() && all_list[i]->GetCollision().object_type != eObjectType::Terrain)
 		{
 			continue;
 		}
-		for (int j = 0; j < partner_list.size(); j++)
+		for (int j = 0; j < all_list.size(); j++)
 		{
-			if (!partner_list[j]->IsActive())
+			if (i == j || !all_list[j]->IsActive())
 			{
 				continue;
 			}
- 			CheckCollision(target_list[i], partner_list[j]);
+			Collision tc = all_list[i]->GetCollision();
+			Collision pc = all_list[j]->GetCollision();
+			if (tc.object_type == eObjectType::Terrain)
+			{
+				if (pc.object_type == eObjectType::Player || 
+					pc.object_type == eObjectType::Enemy || 
+					pc.object_type == eObjectType::Player_Attack)
+				{
+					Vector2D dis = all_list[i]->GetLocation() - all_list[j]->GetLocation();
+					if (fabsf(dis.x) <= 100.0f && fabs(dis.y) <= 100.0f)
+					{
+						CheckCollision(all_list[i], all_list[j]);
+						all_list[i]->Activate(all_list[i]->GetLocation());
+					}
+				}
+			}
+			if (tc.object_type == eObjectType::Enemy)
+			{
+				if (pc.object_type == eObjectType::Player ||
+					pc.object_type == eObjectType::Player_Attack)
+				{
+					CheckCollision(all_list[i], all_list[j]);
+				}
+			}
+			if (tc.object_type == eObjectType::Gate && pc.object_type == eObjectType::Player)
+			{
+				CheckCollision(all_list[i], all_list[j]);
+			}
 		}
 	}
-
-	//target_list = object->GetObjectsList(eObjectType::Terrain);
-	//partner_list = object->GetObjectsList(eObjectType::Enemy);
-
-	//for (int i = 0; i < target_list.size(); i++)
-	//{
-	//	if (!target_list[i]->IsActive())
-	//	{
-	//		continue;
-	//	}
-	//	for (int j = 0; j < partner_list.size(); j++)
-	//	{
-	//		if (!partner_list[j]->IsActive())
-	//		{
-	//			continue;
-	//		}
-	//		CheckCollision(target_list[i], partner_list[j]);
-	//	}
-	//}
 
 	// 描画処理
 	Draw();
@@ -163,8 +169,8 @@ void SceneManager::CheckCollision(GameObject* target, GameObject* partner)
 		{
 			if (tc.collision_type == eCollisionType::Box)
 			{
-				Vector2D dis = target->GetLocation() - partner->GetLocation();
 				Vector2D diff = tc.box_size / 2 + pc.box_size / 2;
+				Vector2D dis = target->GetLocation() - partner->GetLocation();
 				if (fabs(dis.x) < fabs(diff.x) && fabs(dis.y) < fabs(diff.y))
 				{
 					target->OnHitCollision(partner);
@@ -179,21 +185,14 @@ void SceneManager::CheckCollision(GameObject* target, GameObject* partner)
 
 				//矩形の角度を0とした場合の円の相対位置
 				Vector2D local = 0.0f;
-				local.x = ploc.x * cosf(-partner->GetAngle()) - ploc.y * sinf(-partner->GetAngle());
-				local.y = ploc.x * sinf(-partner->GetAngle()) + ploc.y * cosf(-partner->GetAngle());
+				local = L_Rotate(ploc, partner->GetAngle());
 
 				//clampを使って最近接点の確認
 				Vector2D near_loc = 0.0f;
-				if (current_scene->GetNowSceneType() == eSceneType::title)
-				{
-					near_loc.x = Clamp(local.x, pc.box_size.x / 2, -pc.box_size.x / 2);
-					near_loc.y = Clamp(local.y, pc.box_size.y / 2, -pc.box_size.y / 2);
-				}
-				else
-				{
-					near_loc.x = Clamp(local.x, pc.box_size.x / 2, -pc.box_size.x / 2);
-					near_loc.y = Clamp(local.y, pc.box_size.y / 2, -pc.box_size.y / 2);
-				}
+
+				near_loc.x = Clamp(local.x, pc.box_size.x / 2, -pc.box_size.x / 2);
+				near_loc.y = Clamp(local.y, pc.box_size.y / 2, -pc.box_size.y / 2);
+
 
 				Vector2D diff = local - near_loc;
 				float dis = diff.x * diff.x + diff.y * diff.y;
@@ -211,29 +210,61 @@ void SceneManager::CheckCollision(GameObject* target, GameObject* partner)
 		}
 		else
 		{
-			//２つのオブジェクトの距離を取得
-			Vector2D diff = target->GetLocation() - partner->GetLocation();
-
-			float dis = diff.x * diff.x + diff.y * diff.y;
-
-			//２つのオブジェクトの当たり判定の大きさを取得
-			float rad = tc.radius + pc.radius;
-
-			// 円の当たり判定
-			if (dis > rad * rad)
+			if (tc.collision_type == eCollisionType::Box)
 			{
-				return;
+				//矩形の中心点を原点とした円の相対位置
+				Vector2D ploc = partner->GetLocation() - target->GetLocation();
+
+				//矩形の角度を0とした場合の円の相対位置
+				Vector2D local = 0.0f;
+				local = L_Rotate(ploc, target->GetAngle());
+
+				//clampを使って最近接点の確認
+				Vector2D near_loc = 0.0f;
+
+				near_loc.x = Clamp(local.x, tc.box_size.x / 2, -tc.box_size.x / 2);
+				near_loc.y = Clamp(local.y, tc.box_size.y / 2, -tc.box_size.y / 2);
+
+
+				Vector2D diff = local - near_loc;
+				float dis = diff.x * diff.x + diff.y * diff.y;
+
+				float rad = pc.radius * pc.radius;
+
+				if (dis > rad)
+				{
+					return;
+				}
+
+				target->OnHitCollision(partner);
+				partner->OnHitCollision(target);
 			}
-			// 当たっていることを通知する
-			target->OnHitCollision(partner);
-			partner->OnHitCollision(target);
+			else
+			{
+				//２つのオブジェクトの距離を取得
+				Vector2D diff = target->GetLocation() - partner->GetLocation();
+
+				float dis = diff.x * diff.x + diff.y * diff.y;
+
+				//２つのオブジェクトの当たり判定の大きさを取得
+				float rad = tc.radius + pc.radius;
+
+				// 円の当たり判定
+				if (dis > rad * rad)
+				{
+					return;
+				}
+				// 当たっていることを通知する
+				target->OnHitCollision(partner);
+				partner->OnHitCollision(target);
+			}
 		}
 	}
 }
 
-float SceneManager::Clamp(float value, float max, float min)
-{
-	if (value < min) return min;
-	if (value > max) return max;
-	return value;
-}
+//float SceneManager::Clamp(float value, float max, float min)
+//{
+//	if (value < min) return min;
+//	if (value > max) return max;
+//	return value;
+//}

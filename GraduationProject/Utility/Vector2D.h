@@ -101,3 +101,13 @@ public:
 
 };
 
+//クランプ
+float Clamp(float value, float max, float min);
+
+//ワールド座標変換用変数
+Vector2D W_Rotate(const Vector2D& v, float angle);
+
+//ローカル座標変換用変数
+Vector2D L_Rotate(const Vector2D& v, float angle);
+
+

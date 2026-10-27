@@ -6,7 +6,9 @@ void FlyEnemy::Initialize()
 	active = false;
 	flip = false;
 	anim_timer = 0.0f;
-	rad = 24.0f;
+	collision.radius = 24.0f;
+	e_type = EnemyType::e_normal;
+	hp = 1;
 	__super::Initialize();
 }
 
@@ -27,7 +29,7 @@ void FlyEnemy::Draw(Vector2D c_pos) const
 	Vector2D d_pos = c_pos - location;
 	d_pos.x = D_WIN_MAX_X / 2 - d_pos.x;
 	d_pos.y = D_WIN_MAX_Y / 2 - d_pos.y;
-	DrawCircle(d_pos.x, d_pos.y, rad, 0xffaaaa, true);
+	DrawCircle(d_pos.x, d_pos.y, collision.radius, 0xffaaaa, true);
 }
 
 // 終了時処理
@@ -45,16 +47,19 @@ void FlyEnemy::DeActivate()
 
 void FlyEnemy::Movement(float delta_second)
 {
-	if (flip)	velocity.x = 0.5f;
-	else velocity.x = -0.5f;
-	anim_timer += delta_second;
-	velocity.y = sinf(anim_timer * 2.5f) * 1.0f;
+	if (e_state != e_Damage)
+	{
+		if (flip)	velocity.x = 0.5f;
+		else velocity.x = -0.5f;
+		anim_timer += delta_second;
+		velocity.y = sinf(anim_timer * 2.5f) * 1.0f;
+	}
 }
 
 // 攻撃処理
 void FlyEnemy::Attack(float delta_second)
 {
-
+	Movement(delta_second);
 }
 
 //アニメーション制御処理

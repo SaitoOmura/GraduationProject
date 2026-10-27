@@ -20,6 +20,7 @@ protected:
 	std::vector<int>	animation;		//アニメーション
 	std::vector<int>	sounds;			//効果音
 	bool				flip;			//反転
+	float				invisible_time;
 
 public:
 	CharaBase() :
@@ -87,5 +88,12 @@ private:
 	/// </summary>
 	/// <param name="hit_object">1フレームあたりの時間</param>
 	virtual void EffectControl(Animation& anim, float delta_second);
+
+protected:
+	/// <summary>
+	/// ダメージ処理
+	/// </summary>
+	/// <param name="target_loc">相手の座標</param>
+	virtual void Damage(Vector2D target_loc);
 };
 

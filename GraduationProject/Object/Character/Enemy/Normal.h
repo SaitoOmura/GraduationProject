@@ -4,14 +4,20 @@
 
 enum type
 {
-	normal,
+	enormal,
 	mush,
 	piyo,
-	bear
+	bear,
+	ebeam,
+	esword,
+	efire
 };
 
 class Normal : public EnemyBase
 {
+private:
+	type n_type;
+
 public:
 	/// <summary>
 	/// 初期化処理
@@ -30,6 +36,16 @@ public:
 	/// 終了時処理
 	/// </summary>
 	virtual void Finalize() override;
+
+	void SetEnemyType(type type);
+
+	/// <summary>
+	/// 当たり判定通知処理
+	/// </summary>
+	/// <param name="hit_object">当たったゲームオブジェクトのポインタ</param>
+	virtual void OnHitCollision(GameObject* hit_object) override;
+
+	virtual void OutArea() override;
 
 private:
 	/// <summary>

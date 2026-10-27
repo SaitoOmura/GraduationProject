@@ -102,3 +102,26 @@ void Vector2D::ToInt(int* x, int* y) const
 	*x = static_cast<int>(this->x);
 	*y = static_cast<int>(this->y);
 }
+
+float Clamp(float value, float max, float min)
+{
+	if (value < min) return min;
+	if (value > max) return max;
+	return value;
+}
+
+Vector2D W_Rotate(const Vector2D& v, float angle)
+{
+	float c = cosf(angle);
+	float s = sinf(angle);
+
+	return Vector2D(
+		v.x * c - v.y * s,
+		v.x * s + v.y * c
+	);
+}
+
+Vector2D L_Rotate(const Vector2D& v, float angle)
+{
+	return W_Rotate(v, -angle);
+}

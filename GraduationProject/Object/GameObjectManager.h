@@ -17,6 +17,7 @@ private:
 	std::vector<GameObject*>	player_list;
 	std::vector<GameObject*>	enemy_list;
 	std::vector<GameObject*>	terrain_list;
+	std::vector<GameObject*>	pattack_list;
 
 public:
 	/// <summary>
@@ -55,14 +56,13 @@ public:
 					// ƒŠƒXƒg‚Ì“r’†‚É‘}“ü‚·‚é
 					terrain_list.insert(itr, obj);
 					break;
+				case eObjectType::Player_Attack:
+					itr = pattack_list.begin();
+					pattack_list.insert(itr, obj);
+					break;
 				default:
-
 					break;
 				}
-				
-				
-
-
 			}
 			// ¶¬ƒŠƒXƒg‚ğ‰ğ•ú‚·‚é
 			create_objects.clear();
@@ -117,7 +117,11 @@ public:
 			return enemy_list;
 			break;
 		case eObjectType::Terrain:
+		case eObjectType::Throgh:
 			return terrain_list;
+			break;
+		case eObjectType::Player_Attack:
+			return pattack_list;
 			break;
 		}
 	}

@@ -11,8 +11,10 @@ void Camera::Initialize()
 	this->size.y = GAME_WIN_MAX_Y;
 
 	// カメラの初期座標を設定
-	this->location.x = 0  + (D_WIN_MAX_X / 2);
+	this->location.x = 0 + (D_WIN_MAX_X / 2);
 	this->location.y = size.y / 2;
+
+	tracking_speed = 0.0f;
 
 }
 
@@ -26,7 +28,8 @@ void Camera::Update(float delta_second)
 void Camera::Draw()
 {
 	DrawFormatString(0, 100, 0xffffff, "カメラ座標: %f", location.x);
-	DrawFormatString(0, 120, 0xffffff, "プレイヤー座標: %f", player->GetLocation().x);
+	DrawFormatString(0, 120, 0xffffff, "トラッキングスピード: %f", tracking_speed);
+
 }
 
 void Camera::Scroll(float delta_second)
@@ -34,24 +37,40 @@ void Camera::Scroll(float delta_second)
 	tracking_flag = false;
 	if (player->CheckFlip())
 	{
-		if (player->GetLocation().x >= location.x && location.x + size.x / 2 < ProjectConfig::STAGE_WIDTH)
+		if (player->GetLocation().x >= location.x && location.x + size.x / 2 < ProjectConfig::STAGE_WIDTH - 48.0f)
 		{
 			tracking_flag = true;
-			if (tracking_speed <= player->GetVelocity().x)
+			if (tracking_speed.x <= player->GetVelocity().x)
 			{
-				tracking_speed += delta_second * 3;
+				tracking_speed.x += delta_second * 3;
 			}
 		}
 	}
 	else
 	{
-		if (player->GetLocation().x <= location.x - size.x / 2 + 100 && location.x - size.x / 2 > 0)
+		if (player->GetLocation().x <= location.x - size.x / 2 + 300 && location.x - D_WIN_MAX_X / 2 > 0)
 		{
 			tracking_flag = true;
-			if (tracking_speed >= player->GetVelocity().x)
+			if (tracking_speed.x >= player->GetVelocity().x)
 			{
-				tracking_speed -= delta_second * 3;
+				tracking_speed.x -= delta_second * 3;
 			}
+		}
+	}
+	if (player->GetLocation().y >= location.y + size.y / 2 - 80  && location.y + size.y / 2 < ProjectConfig::STAGE_HEIGHT - 64.0f)
+	{
+		tracking_flag = true;
+		if (tracking_speed.y <= player->GetVelocity().y)
+		{
+			tracking_speed.y += delta_second * 3;
+		}
+	}
+	else if (player->GetLocation().y <= location.y && location.y - D_WIN_MAX_Y / 2 > 0)
+	{
+		tracking_flag = true;
+		if (tracking_speed.y >= player->GetVelocity().y)
+		{
+			tracking_speed.y -= delta_second * 3;
 		}
 	}
 	if (!tracking_flag)
@@ -60,17 +79,34 @@ void Camera::Scroll(float delta_second)
 		if (flame >= 1.0f)
 		{
 			tracking_speed *= 0.9f;
-			if (tracking_speed > 0.0f)
+			if (tracking_speed.x > 0.0f)
 			{
-				if (tracking_speed <= 0.01f) tracking_speed = 0.0f;
+				if (tracking_speed.x <= 0.01f) tracking_speed.x = 0.0f;
 			}
-			else if (tracking_speed < 0.0f)
+			else if (tracking_speed.x < 0.0f)
 			{
-				if (tracking_speed >= -0.01f) tracking_speed = 0.0f;
+				if (tracking_speed.x >= -0.01f) tracking_speed.x = 0.0f;
+			}
+			if (tracking_speed.y > 0.0f)
+			{
+				if (tracking_speed.y <= 0.01f) tracking_speed.y = 0.0f;
+			}
+			else if (tracking_speed.y < 0.0f)
+			{
+				if (tracking_speed.y >= -0.01f) tracking_speed.y = 0.0f;
 			}
 		}
 	}
-	location.x += tracking_speed * delta_second * 140;
+	location += tracking_speed * delta_second * 140.0f;
+
+	if (location.x + size.x / 2 >= ProjectConfig::STAGE_WIDTH)
+	{
+		location.x = ProjectConfig::STAGE_WIDTH - size.x / 2;
+	}
+	else if (location.x - size.x / 2 <= 0.0f)
+	{
+		location.x = size.x / 2;
+	}
 }
 
 // カメラ座標設定処理
@@ -83,6 +119,14 @@ void Camera::SetCameraPos(Vector2D location)
 void Camera::SetPlayer(Player* p)
 {
 	player = p;
+	if (player->GetLocation().x >= location.x && location.x + size.x / 2 < ProjectConfig::STAGE_WIDTH)
+	{
+		location.x = player->GetLocation().x;
+	}
+	if (player->GetLocation().y >= location.y + size.y / 2 && location.y + size.y / 2 < ProjectConfig::STAGE_HEIGHT)
+	{
+		location.y = player->GetLocation().y - size .y / 2 + 100.0f;
+	}
 }
 
 const Vector2D Camera::GetLocation() const

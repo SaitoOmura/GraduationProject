@@ -77,5 +77,7 @@ private:
 	void Create_Map(int stage);
 
 	void Load_Enemy(int stage);
+
+	void Create_Enemy();
 };
 

@@ -61,6 +61,6 @@ private:
 	/// <param name="max">Å‘å’l</param>
 	/// <param name="min">Å¬’l</param>
 	/// <returns></returns>
-	float Clamp(float value, float max, float min);
+	/*float Clamp(float value, float max, float min);*/
 };
 

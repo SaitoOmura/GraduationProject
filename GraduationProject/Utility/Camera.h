@@ -11,7 +11,7 @@ private:
 	Vector2D size;
 	Player* player;
 	bool tracking_flag;
-	float tracking_speed;
+	Vector2D tracking_speed;
 	float flame;
 
 public:

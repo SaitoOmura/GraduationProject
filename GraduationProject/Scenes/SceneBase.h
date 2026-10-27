@@ -9,6 +9,7 @@
 #include "../Utility/Input/InputManager.h"
 #include "../Object/GameObjectManager.h"
 #include "../Utility/Camera.h"
+#include "../Object/Character/Player/Player.h"
 
 /// <summary>
 /// シーンタイプ
@@ -25,8 +26,11 @@ enum class eSceneType
 struct stagedata
 {
 	int player_life;
+	Vector2D p_loc;
+	Ability p_ability;
 	bool clear;
 	float timer;
+	int stage_num;
 };
 
 class SceneBase

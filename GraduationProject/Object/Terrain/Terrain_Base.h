@@ -2,8 +2,19 @@
 
 #include "../GameObject.h"
 
+enum TerrainType
+{
+	earth,
+	wall,
+	throgh,
+	block
+};
+
 class Terrain_Base : public GameObject
 {
+private:
+	TerrainType t_type;
+	Vector2D velocity;
 
 public:
 	/// <summary>
@@ -26,9 +37,14 @@ public:
 
 	bool Check_Loc(Vector2D loc);
 
+
 	virtual void DeActivate() override;
 
 	virtual void Activate();
+
+	void SetTerrainType(TerrainType type);
+
+	TerrainType GetTerrainType() const;
 
 public:
 	/// <summary>

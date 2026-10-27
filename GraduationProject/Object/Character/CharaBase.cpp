@@ -26,6 +26,7 @@ void CharaBase::Finalize()
 
 void CharaBase::DeActivate()
 {
+	velocity = 0.0f;
 	__super::DeActivate();
 }
 
@@ -60,4 +61,19 @@ void CharaBase::AnimationControl(Animation& anim, float delta_second)
 void CharaBase::EffectControl(Animation& anim, float delta_second)
 {
 
+}
+
+void CharaBase::Damage(Vector2D target_loc)
+{
+	float dis = location.x - target_loc.x;
+	velocity.y = -2.0f;
+	if (dis < 0.0f)
+	{
+		velocity.x = -2.0f;
+	}
+	else
+	{
+		velocity.x = 2.0f;
+	}
+	hp--;
 }
