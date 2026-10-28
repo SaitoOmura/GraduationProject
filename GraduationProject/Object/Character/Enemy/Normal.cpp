@@ -1,4 +1,5 @@
 #include "Normal.h"
+#include "../../GameObjectManager.h"
 
 // èâä˙âªèàóù
 void Normal::Initialize()
@@ -6,6 +7,35 @@ void Normal::Initialize()
 	active = false;
 	flip = false;
 	collision.radius = 24.0f;
+	logic = 0.0f;
+	GameObjectManager* gm = GameObjectManager::GetInstance();
+
+	switch (n_type)
+	{
+	case mush:
+		attack = gm->CreateObject<Enemy_Attack>(0.0f);
+		attack->DeActivate();
+		attack->SetAbilityType(EA_T::a_mush);
+		break;
+	case ebeam:
+		attack = gm->CreateObject<Enemy_Attack>(0.0f);
+		attack->DeActivate();
+		attack->SetAbilityType(EA_T::ea_beam);
+		break;
+	case esword:
+		attack = gm->CreateObject<Enemy_Attack>(0.0f);
+		attack->DeActivate();
+		attack->SetAbilityType(EA_T::ea_sword);
+		break;
+	case efire:
+		attack = gm->CreateObject<Enemy_Attack>(0.0f);
+		attack->DeActivate();
+		attack->SetAbilityType(EA_T::ea_fire);
+		break;
+	default:
+		break;
+	}
+
 	__super::Initialize();
 }
 
@@ -13,6 +43,38 @@ void Normal::Initialize()
 void Normal::Update(float delta_second)
 {
 	__super::Update(delta_second);
+
+	if (!inhaling)
+	{
+		if (motion_time > 0.0f)
+		{
+			motion_time -= delta_second;
+			if (motion_time <= 1.5f)
+			{
+				e_state = EnemyState::e_Idle;
+				velocity.x = 0.0f;
+				if (motion_time <= 0.0f)
+				{
+					motion_time = 0.0f;
+					if (logic >= 2) logic = 0;
+					else logic++;
+				}
+			}
+		}
+		else
+		{
+			switch (logic)
+			{
+			case 0:
+			case 1:
+				Movement(delta_second);
+				break;
+			case 2:
+				Attack(delta_second);
+				break;
+			}
+		}
+	}
 }
 
 // ï`âÊèàóù
@@ -147,13 +209,57 @@ void Normal::OnHitCollision(GameObject* hit_object)
 
 void Normal::Movement(float delta_second)
 {
-	//if (flip)	velocity.x = 1.0f;
-	//else velocity.x = -1.0f;
+	if (e_state != EnemyState::e_Move)
+	{
+		if (flip)
+		{
+			velocity.x -= delta_second * 4;
+			if (velocity.x <= 0.2f) velocity.x = 0.0f;
+		}
+		else
+		{
+			velocity.x += delta_second * 4;
+			if (velocity.x >= -0.2f) velocity.x = 0.0f;
+		}
+	}
+	e_state = EnemyState::e_Move;
+	if (flip)	velocity.x = 0.4f;
+	else velocity.x = -0.4f;
+	motion_time = 3.0f;
 }
 
 // çUåÇèàóù
 void Normal::Attack(float delta_second)
 {
+	e_state = EnemyState::e_Attack;
+	switch (n_type)
+	{	
+	case mush:
+		if (attack->GetHP() > 0)
+		{
+			attack->Activate(this, flip, 3.0f);
+		}
+		break;	
+	case ebeam:
+		attack->Activate(this, flip, 1.5f);
+		motion_time = 2.0f;
+		break;
+	case esword:
+		attack->Activate(this, flip, 1.5f);
+		motion_time = 2.0f;
+		break;
+	case efire:
+		attack->Activate(this, flip, 1.5f);
+		motion_time = 2.0f;
+		break;
+	case enormal:
+	case piyo:
+	case bear:
+		motion_time = 3.0f;
+		break;
+	default:
+		break;
+	}
 
 }
 

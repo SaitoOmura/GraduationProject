@@ -16,6 +16,10 @@ void FlyEnemy::Initialize()
 void FlyEnemy::Update(float delta_second)
 {
 	__super::Update(delta_second);
+	if (!inhaling)
+	{
+		Movement(delta_second);
+	}
 }
 
 // •`‰æˆ—

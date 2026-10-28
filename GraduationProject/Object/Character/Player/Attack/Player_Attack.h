@@ -26,6 +26,8 @@ private:
 	Vector2D velocity;
 	bool flip;
 	bool fir;
+	float life_time;
+	GameObject* player;
 
 public:
 	/// <summary>
@@ -48,9 +50,9 @@ public:
 
 	void Deactivate();
 
-	void Activate(Vector2D loc, bool f);
+	void Activate(GameObject* p, bool f, float time);
 
-	void Charge(Vector2D loc, float time, bool f);
+	void Charge( float time, bool f);
 
 	void Fire();
 

@@ -117,7 +117,6 @@ public:
 			return enemy_list;
 			break;
 		case eObjectType::Terrain:
-		case eObjectType::Throgh:
 			return terrain_list;
 			break;
 		case eObjectType::Player_Attack:

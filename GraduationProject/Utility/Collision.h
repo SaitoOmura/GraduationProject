@@ -10,9 +10,9 @@ enum class eObjectType : unsigned char
 	Player,
 	Enemy,
 	Terrain,
-	Throgh,
 	Gate,
-	Player_Attack
+	Player_Attack,
+	Enemy_Attack,
 };
 
 enum class eCollisionType : unsigned char

@@ -66,10 +66,18 @@ void SceneManager::Update(float delta_second)
 					}
 				}
 			}
-			if (tc.object_type == eObjectType::Enemy)
+			if (tc.object_type == eObjectType::Player)
 			{
-				if (pc.object_type == eObjectType::Player ||
-					pc.object_type == eObjectType::Player_Attack)
+				if (pc.object_type == eObjectType::Enemy ||
+					pc.object_type == eObjectType::Enemy_Attack)
+				{
+					CheckCollision(all_list[i], all_list[j]);
+				}
+			}
+			if (tc.object_type == eObjectType::Player_Attack)
+			{
+				if (pc.object_type == eObjectType::Enemy ||
+					pc.object_type == eObjectType::Enemy_Attack)
 				{
 					CheckCollision(all_list[i], all_list[j]);
 				}

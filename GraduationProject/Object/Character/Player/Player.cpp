@@ -12,7 +12,6 @@ void Player::Initialize()
 	collision.collision_type = eCollisionType::Circle;
 	collision.hit_object_type.push_back(eObjectType::Enemy);
 	collision.hit_object_type.push_back(eObjectType::Terrain);
-	collision.hit_object_type.push_back(eObjectType::Throgh);
 	collision.is_blocking = true;
 	collision.box_size = 36.0f;
 	collision.radius = 24.0f;
@@ -489,11 +488,11 @@ void Player::Attack(float delta_second)
 					bb[0]->SetAbilityType(now_abi, Ability_Coltype::a_box);
 					if (flip)
 					{
-						bb[0]->Activate(Vector2D(location.x + bb[0]->GetCollision().box_size.x / 2, location.y), flip);
+						bb[0]->Activate(this, flip, 0.5f);
 					}
 					else
 					{
-						bb[0]->Activate(Vector2D(location.x - bb[0]->GetCollision().box_size.x / 2, location.y), flip);
+						bb[0]->Activate(this, flip, 0.5f);
 					}
 					motion_time = 1.0f;
 				}
@@ -521,11 +520,11 @@ void Player::Attack_Push()
 			bb[1]->SetAbilityType(Ability::star, Ability_Coltype::a_circle);
 			if (flip)
 			{
-				bb[1]->Activate(Vector2D(location.x - 20, location.y), flip);
+				bb[1]->Activate(this, flip, 3.0f);
 			}
 			else
 			{
-				bb[1]->Activate(Vector2D(location.x + 20, location.y), flip);
+				bb[1]->Activate(this, flip, 3.0f);
 			}
 			bb[1]->Fire();
 			hold = false;
@@ -559,11 +558,11 @@ void Player::Attack_Hold(float delta_second)
 			bb[0]->SetAbilityType(now_abi, Ability_Coltype::a_box);
 			if (flip)
 			{
-				bb[0]->Activate(Vector2D(location.x + bb[0]->GetCollision().box_size.x / 2, location.y), flip);
+				bb[0]->Activate(this, flip, 1.0f);
 			}
 			else
 			{
-				bb[0]->Activate(Vector2D(location.x - bb[0]->GetCollision().box_size.x / 2, location.y), flip);
+				bb[0]->Activate(this, flip, 1.0f);
 			}
 		}
 		break;
@@ -581,11 +580,11 @@ void Player::Attack_Hold(float delta_second)
 				{
 					if (flip)
 					{
-						bb[i]->Activate(Vector2D(location.x + 20, location.y), flip);
+						bb[i]->Activate(this, flip, 3.0f);
 					}
 					else
 					{
-						bb[i]->Activate(Vector2D(location.x - 20, location.y), flip);
+						bb[i]->Activate(this, flip, 3.0f);
 					}
 					ac = i;
 					attack = true;
@@ -595,7 +594,7 @@ void Player::Attack_Hold(float delta_second)
 		}
 		else
 		{
-			bb[ac]->Charge(Vector2D(location.x, location.y), hold_tick, flip);
+			bb[ac]->Charge(hold_tick, flip);
 		}
 		break;
 	case sword:

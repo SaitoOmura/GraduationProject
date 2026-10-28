@@ -9,6 +9,7 @@ void Player_Attack::Initialize()
 	collision.hit_object_type.push_back(eObjectType::Enemy);
 	collision.hit_object_type.push_back(eObjectType::Terrain);
 	hp = 1;
+	life_time = 0.0f;
 }
 
 // XVˆ—
@@ -23,6 +24,27 @@ void Player_Attack::Update(float delta_second)
 	{
 		Movement(delta_second);
 		location += velocity * delta_second * 140;
+	}
+	if (life_time > 0.0f)
+	{
+		life_time -= delta_second;
+		if (a_col == Ability_Coltype::a_box)
+		{
+			if (flip)
+			{
+				location.x = player->GetLocation().x + collision.box_size.x / 2;
+			}
+			else
+			{
+				location.x = player->GetLocation().x - collision.box_size.x / 2;
+			}
+			location.y = player->GetLocation().y;
+		}
+		if (life_time <= 0.0f)
+		{
+			life_time = 0.0f;
+			Deactivate();
+		}
 	}
 	Vector2D d_pos = camera->GetLocation() - location;
 	d_pos.x = D_WIN_MAX_X / 2 - d_pos.x;
@@ -126,17 +148,19 @@ void Player_Attack::Deactivate()
 	collision.is_blocking = false;
 }
 
-void Player_Attack::Activate(Vector2D loc, bool f)
+void Player_Attack::Activate(GameObject* p, bool f, float time)
 {
 	active = true;
-	location = loc;
+	player = p;
+	if (abi == Ability::star) location = player->GetLocation();
 	flip = f;
 	collision.is_blocking = true;
+	life_time = time;
 }
 
-void Player_Attack::Charge(Vector2D loc, float time, bool f)
+void Player_Attack::Charge(float time, bool f)
 {
-	location = loc;
+	location = player->GetLocation();
 	if (f)
 	{
 		location.x += 20.0f;

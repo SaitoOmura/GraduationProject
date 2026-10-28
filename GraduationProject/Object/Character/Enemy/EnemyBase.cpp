@@ -28,10 +28,6 @@ void EnemyBase::Update(float delta_second)
 	{
 		DeActivate();
 	}
-	if (!inhaling)
-	{
-		Movement(delta_second);
-	}
 	velocity.y += GRAVITY * delta_second;
 	location += velocity * delta_second * 140.0f;
 }
@@ -120,6 +116,7 @@ void EnemyBase::OnHitCollision(GameObject* hit_object)
 		{
 			normal = Vector2D((local.x >= 0.0f ? 1.0f : -1.0f), 0.0f);
 			push = Vector2D(normal.x * (dx + rad), 0.0f);
+			flip = !flip;
 		}
 		else
 		{

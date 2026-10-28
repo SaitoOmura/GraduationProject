@@ -1,6 +1,7 @@
 #pragma once
 
 #include "EnemyBase.h"
+#include "E_Attack/Enemy_Attack.h"
 
 enum type
 {
@@ -17,6 +18,9 @@ class Normal : public EnemyBase
 {
 private:
 	type n_type;
+	float motion_time;
+	int logic;
+	Enemy_Attack* attack;
 
 public:
 	/// <summary>
