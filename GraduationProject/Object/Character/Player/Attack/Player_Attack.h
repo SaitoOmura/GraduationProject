@@ -17,11 +17,20 @@ enum Ability_Coltype
 	a_circle
 };
 
+enum Ability_State
+{
+	a_normal,
+	a_dash,
+	a_djump,
+	a_hold
+};
+
 class Player_Attack : public GameObject
 {
 private:
 	Ability abi;
 	Ability_Coltype a_col;
+	Ability_State a_st;
 	float charge_time;
 	Vector2D velocity;
 	bool flip;
@@ -50,7 +59,7 @@ public:
 
 	void Deactivate();
 
-	void Activate(GameObject* p, bool f, float time);
+	void Activate(GameObject* p, bool f, float time, Ability_State state);
 
 	void Charge( float time, bool f);
 

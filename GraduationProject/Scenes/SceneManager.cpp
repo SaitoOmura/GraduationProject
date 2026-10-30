@@ -232,7 +232,7 @@ void SceneManager::CheckCollision(GameObject* target, GameObject* partner)
 
 				//矩形の角度を0とした場合の円の相対位置
 				Vector2D local = 0.0f;
-				local = L_Rotate(ploc, target->GetAngle());
+				local = L_Rotate(ploc, -target->GetAngle());
 
 				//clampを使って最近接点の確認
 				Vector2D near_loc = 0.0f;

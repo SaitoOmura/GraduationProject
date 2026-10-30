@@ -8,34 +8,6 @@ void Normal::Initialize()
 	flip = false;
 	collision.radius = 24.0f;
 	logic = 0.0f;
-	GameObjectManager* gm = GameObjectManager::GetInstance();
-
-	switch (n_type)
-	{
-	case mush:
-		attack = gm->CreateObject<Enemy_Attack>(0.0f);
-		attack->DeActivate();
-		attack->SetAbilityType(EA_T::a_mush);
-		break;
-	case ebeam:
-		attack = gm->CreateObject<Enemy_Attack>(0.0f);
-		attack->DeActivate();
-		attack->SetAbilityType(EA_T::ea_beam);
-		break;
-	case esword:
-		attack = gm->CreateObject<Enemy_Attack>(0.0f);
-		attack->DeActivate();
-		attack->SetAbilityType(EA_T::ea_sword);
-		break;
-	case efire:
-		attack = gm->CreateObject<Enemy_Attack>(0.0f);
-		attack->DeActivate();
-		attack->SetAbilityType(EA_T::ea_fire);
-		break;
-	default:
-		break;
-	}
-
 	__super::Initialize();
 }
 
@@ -66,12 +38,22 @@ void Normal::Update(float delta_second)
 			switch (logic)
 			{
 			case 0:
-			case 1:
+			case 2:
 				Movement(delta_second);
 				break;
-			case 2:
+			case 1:
 				Attack(delta_second);
 				break;
+			}
+		}
+	}
+	else
+	{
+		if (n_type != type::mash)
+		{
+			if (attack && attack->IsActive())
+			{
+				attack->Deactivate();
 			}
 		}
 	}
@@ -91,7 +73,7 @@ void Normal::Draw(Vector2D c_pos) const
 	case enormal:
 		color = 0xba6432;
 		break;
-	case mush:
+	case mash:
 		color = 0xe3b0ab;
 		break;
 	case piyo:
@@ -107,7 +89,7 @@ void Normal::Draw(Vector2D c_pos) const
 		color = 0x00896b;
 		break;
 	case efire:
-		color = 0xff0000;
+		color = 0xff4444;
 		break;
 	default:
 		break;
@@ -128,26 +110,39 @@ void Normal::Finalize()
 void Normal::SetEnemyType(type type)
 {
 	n_type = type;
+	GameObjectManager* gm = GameObjectManager::GetInstance();
 	switch (n_type)
 	{
 	case enormal:
 	case piyo:
 		hp = 1;
 		break;		
-	case mush:
+	case mash:
 		hp = 2;
+		attack = gm->CreateObject<Enemy_Attack>(0.0f);
+		attack->DeActivate();
+		attack->SetAbilityType(EA_T::a_mush);
 		break;
 	case bear:
 		hp = 4;
 		break;
 	case ebeam:
 		hp = 2;
+		attack = gm->CreateObject<Enemy_Attack>(0.0f);
+		attack->DeActivate();
+		attack->SetAbilityType(EA_T::ea_beam);
 		break;
 	case esword:
 		hp = 2;
+		attack = gm->CreateObject<Enemy_Attack>(0.0f);
+		attack->DeActivate();
+		attack->SetAbilityType(EA_T::ea_sword);
 		break;
 	case efire:
 		hp = 2;
+		attack = gm->CreateObject<Enemy_Attack>(0.0f);
+		attack->DeActivate();
+		attack->SetAbilityType(EA_T::ea_fire);
 		break;
 	default:
 		break;
@@ -156,7 +151,7 @@ void Normal::SetEnemyType(type type)
 	{
 	case enormal:
 	case piyo:	
-	case mush:
+	case mash:
 	case bear:
 		e_type = EnemyType::e_normal;
 		break;
@@ -182,7 +177,7 @@ void Normal::OutArea()
 	case piyo:
 		hp = 1;
 		break;
-	case mush:
+	case mash:
 		hp = 2;
 		break;
 	case bear:
@@ -223,8 +218,34 @@ void Normal::Movement(float delta_second)
 		}
 	}
 	e_state = EnemyState::e_Move;
-	if (flip)	velocity.x = 0.4f;
-	else velocity.x = -0.4f;
+	switch (n_type)
+	{
+	case enormal:
+		if (flip)	velocity.x = 0.4f;
+		else velocity.x = -0.4f;
+		break;
+	case mash:
+		if (flip)	velocity.x = 0.2f;
+		else velocity.x = -0.2f;
+		break;
+	case piyo:
+		break;
+	case bear:
+		break;
+	case ebeam:
+		if (flip)	velocity.x = 0.4f;
+		else velocity.x = -0.4f;
+		break;
+	case esword:
+		break;
+	case efire:
+		if (flip)	velocity.x = 0.3f;
+		else velocity.x = -0.3f;
+		break;
+	default:
+		break;
+	}
+
 	motion_time = 3.0f;
 }
 
@@ -234,11 +255,12 @@ void Normal::Attack(float delta_second)
 	e_state = EnemyState::e_Attack;
 	switch (n_type)
 	{	
-	case mush:
+	case mash:
 		if (attack->GetHP() > 0)
 		{
-			attack->Activate(this, flip, 3.0f);
+			attack->Activate(this, flip, 1.0f);
 		}
+		motion_time = 1.5f;
 		break;	
 	case ebeam:
 		attack->Activate(this, flip, 1.5f);

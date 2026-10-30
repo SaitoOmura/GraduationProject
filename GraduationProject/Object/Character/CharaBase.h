@@ -94,6 +94,6 @@ protected:
 	/// ダメージ処理
 	/// </summary>
 	/// <param name="target_loc">相手の座標</param>
-	virtual void Damage(Vector2D target_loc);
+	virtual void Damage(Vector2D target_loc, float dam);
 };
 

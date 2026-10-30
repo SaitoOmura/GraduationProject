@@ -34,6 +34,7 @@ private:
 	float motion_time;
 	bool warp;
 	GateID gate_id;
+	float j_vel;		//ジャンプ直前の移動速度
 
 public:
 	Player() :

@@ -63,7 +63,7 @@ void CharaBase::EffectControl(Animation& anim, float delta_second)
 
 }
 
-void CharaBase::Damage(Vector2D target_loc)
+void CharaBase::Damage(Vector2D target_loc, float dam)
 {
 	float dis = location.x - target_loc.x;
 	velocity.y = -2.0f;
@@ -75,5 +75,5 @@ void CharaBase::Damage(Vector2D target_loc)
 	{
 		velocity.x = 2.0f;
 	}
-	hp--;
+	hp-= dam;
 }

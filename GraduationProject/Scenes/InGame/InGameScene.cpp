@@ -29,10 +29,6 @@ void InGameScene::Initialize()
 	camera = Camera::GetInstance();
 	camera->Initialize();
 	camera->SetPlayer(player);
-	//if (data.stage_num == 4)
-	//{
-	//	camera->SetCameraPos(Vector2D(D_WIN_MAX_X / 2,))
-	//}
 	__super::Initialize();
 }
 
@@ -40,18 +36,6 @@ eSceneType InGameScene::Update(const float& delta_second)
 {
 	Camera* camera = Camera::GetInstance();
 	camera->Update(delta_second);
-	//for (int i = 0; i < terrain.size(); i++)
-	//{
-	//	if (terrain[i]->IsActive())
-	//	{
-	//		continue;
-	//	}
-	//	if (terrain[i]->GetLocation().x - terrain[i]->GetCollision().box_size.x / 2 <= camera->GetLocation().x + camera->GetCameraSize().x / 1.5 &&
-	//		terrain[i]->GetLocation().x + terrain[i]->GetCollision().box_size.x / 2 >= camera->GetLocation().x - camera->GetCameraSize().x / 1.5)
-	//	{
-	//		terrain[i]->Activate();
-	//	}
-	//}
 	for (int i = 0; i < n_enemy.size(); i++)
 	{
 		if (n_enemy[i]->IsActive())
@@ -204,6 +188,9 @@ void InGameScene::Load_Map(int stage)
 	case 4:
 		str = "Resource/csv/stage1-4.csv";
 		break;
+	case 5:
+		str = "Resource/csv/stage1-5.csv";
+		break;
 	}
 	std::ifstream file(str);
 	if (!file.is_open())
@@ -318,6 +305,9 @@ void InGameScene::Create_Map(int stage)
 			case 3:
 				gate[i]->SetGateID(GateID::Stage4);
 				break;
+			case 4:
+				gate[i]->SetGateID(GateID::Stage5);
+				break;
 			default:
 				break;
 			}
@@ -384,9 +374,9 @@ void InGameScene::Create_Enemy()
 			n_enemy.push_back(gm->CreateObject<Normal>(Vector2D(enemy_pos[i][2] * 64.0f, enemy_pos[i][3] * 64.0f)));
 			n_enemy[n_enemy.size() - 1]->SetEnemyType(type::ebeam);
 			break;
-		case 2:
+		/*case 2:
 			n_enemy.push_back(gm->CreateObject<Normal>(Vector2D(enemy_pos[i][2] * 64.0f, enemy_pos[i][3] * 64.0f)));
-			n_enemy[n_enemy.size() - 1]->SetEnemyType(type::mush);
+			n_enemy[n_enemy.size() - 1]->SetEnemyType(type::mash);
 			break;
 		case 3:
 			f_enemy.push_back(gm->CreateObject<FlyEnemy>(Vector2D(enemy_pos[i][2] * 64.0f, enemy_pos[i][3] * 64.0f)));
@@ -403,8 +393,16 @@ void InGameScene::Create_Enemy()
 			n_enemy.push_back(gm->CreateObject<Normal>(Vector2D(enemy_pos[i][2] * 64.0f, enemy_pos[i][3] * 64.0f)));
 			n_enemy[n_enemy.size() - 1]->SetEnemyType(type::esword);
 			break;
-		default:
+		case 7:
+			n_enemy.push_back(gm->CreateObject<Normal>(Vector2D(enemy_pos[i][2] * 64.0f, enemy_pos[i][3] * 64.0f)));
+			n_enemy[n_enemy.size() - 1]->SetEnemyType(type::efire);
 			break;
+		case 8:
+			n_enemy.push_back(gm->CreateObject<Normal>(Vector2D(enemy_pos[i][2] * 64.0f, enemy_pos[i][3] * 64.0f)));
+			n_enemy[n_enemy.size() - 1]->SetEnemyType(type::bear);
+			break;
+		default:
+			break;*/
 		}
 	}
 

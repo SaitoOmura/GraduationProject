@@ -173,15 +173,15 @@ void Enemy_Attack::SetAbilityType(EA_T ability)
 		collision.radius = 16.0f;
 		break;
 	case EA_T::ea_beam:
-		collision.box_size = Vector2D(20.0f, 36.0f);
+		collision.box_size = Vector2D(64.0f, 64.0f);
 		collision.radius = 0.0f;
 		break;
 	case EA_T::ea_sword:
-		collision.box_size = Vector2D(20.0f, 36.0f);
+		collision.box_size = Vector2D(64.0f, 36.0f);
 		collision.radius = 0.0f;
 		break;
 	case EA_T::ea_fire:
-		collision.box_size = Vector2D(36.0f, 20.0f);
+		collision.box_size = Vector2D(96.0f, 20.0f);
 		collision.radius = 0.0f;
 		break;
 	default:

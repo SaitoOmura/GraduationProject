@@ -1,6 +1,8 @@
 #include "Player_Attack.h"
 #include "../../../../Utility/Camera.h"
 
+#define PI	3.141592653589793238462643
+
 // ‰Šú‰»ˆ—
 void Player_Attack::Initialize()
 {
@@ -20,32 +22,18 @@ void Player_Attack::Update(float delta_second)
 	{
 		return;
 	}
-	if (fir)
-	{
-		Movement(delta_second);
-		location += velocity * delta_second * 140;
-	}
+
+	Movement(delta_second);
 	if (life_time > 0.0f)
 	{
 		life_time -= delta_second;
-		if (a_col == Ability_Coltype::a_box)
-		{
-			if (flip)
-			{
-				location.x = player->GetLocation().x + collision.box_size.x / 2;
-			}
-			else
-			{
-				location.x = player->GetLocation().x - collision.box_size.x / 2;
-			}
-			location.y = player->GetLocation().y;
-		}
 		if (life_time <= 0.0f)
 		{
 			life_time = 0.0f;
 			Deactivate();
 		}
 	}
+	location += velocity * delta_second * 140;
 	Vector2D d_pos = camera->GetLocation() - location;
 	d_pos.x = D_WIN_MAX_X / 2 - d_pos.x;
 	d_pos.y = D_WIN_MAX_Y / 2 - d_pos.y;
@@ -74,7 +62,18 @@ void Player_Attack::Draw(Vector2D c_pos) const
 		}
 		else
 		{
-			DrawBoxAA(d_pos.x - box.x, d_pos.y - box.y, d_pos.x + box.x, d_pos.y + box.y, 0xffff00, 0);
+			Vector2D p1[4] = { Vector2D(-box.x,-box.y), Vector2D(box.x,-box.y) ,Vector2D(box.x,box.y) ,Vector2D(-box.x,box.y) };
+			Vector2D p[4];
+			for (int i = 0; i < 4; i++)
+			{
+				p[i].x = p1[i].x * cosf(angle) - p1[i].y * sinf(angle) + d_pos.x;
+				p[i].y = p1[i].x * sinf(angle) + p1[i].y * cosf(angle) + d_pos.y;
+
+			}
+			DrawLineAA(p[0].x, p[0].y, p[1].x, p[1].y, 0xffff00);
+			DrawLineAA(p[1].x, p[1].y, p[2].x, p[2].y, 0xffff00);
+			DrawLineAA(p[2].x, p[2].y, p[3].x, p[3].y, 0xffff00);
+			DrawLineAA(p[3].x, p[3].y, p[0].x, p[0].y, 0xffff00);
 		}
 		break;
 	case sword:
@@ -130,14 +129,98 @@ void Player_Attack::OnHitCollision(GameObject* hit_object)
 
 void Player_Attack::Movement(float delta_second)
 {
-	if (flip)
+	switch (abi)
 	{
-		velocity.x = 5.0f;
+	case normal:
+		if (flip)
+		{
+			location.x = player->GetLocation().x + collision.box_size.x / 2;
+		}
+		else
+		{
+			location.x = player->GetLocation().x - collision.box_size.x / 2;
+		}
+		location.y = player->GetLocation().y;
+		break;
+	case fire:
+		break;
+	case beam:
+		switch (a_st)
+		{
+		case a_normal:
+			if (flip)
+			{
+				location.x = player->GetLocation().x + collision.box_size.x / 2;
+				angle += PI / 180 * 0.1f;
+			}
+			else
+			{
+				location.x = player->GetLocation().x - collision.box_size.x / 2;
+				angle -= PI / 180 * 0.1f;
+			}
+			location.y = player->GetLocation().y;
+			break;
+		case a_dash:
+			if (life_time >= 1.5f)
+			{
+				collision.box_size.x += 0.15f;
+			}
+			else if(life_time <= 0.5f)
+			{
+				collision.box_size.x -= 0.15f;
+			}
+			if (flip)
+			{
+				location.x = player->GetLocation().x + collision.box_size.x / 2;
+			}
+			else
+			{
+				location.x = player->GetLocation().x - collision.box_size.x / 2;
+			}
+			location.y = player->GetLocation().y;
+			break;
+		case a_djump:
+			collision.box_size.x += 0.15f;
+
+			location.x = player->GetLocation().x;
+			location.y = player->GetLocation().y;
+			break;
+		case a_hold:
+			if (fir)
+			{
+				if (flip)
+				{
+					velocity.x = 5.0f;
+				}
+				else
+				{
+					velocity.x = -5.0f;
+				}
+			}
+			break;
+		default:
+			break;
+		}
+		break;
+	case sword:
+		break;
+	case star:
+		if (fir)
+		{
+			if (flip)
+			{
+				velocity.x = 5.0f;
+			}
+			else
+			{
+				velocity.x = -5.0f;
+			}
+		}
+		break;
+	default:
+		break;
 	}
-	else
-	{
-		velocity.x = -5.0f;
-	}
+
 }
 
 void Player_Attack::Deactivate()
@@ -148,7 +231,7 @@ void Player_Attack::Deactivate()
 	collision.is_blocking = false;
 }
 
-void Player_Attack::Activate(GameObject* p, bool f, float time)
+void Player_Attack::Activate(GameObject* p, bool f, float time, Ability_State state)
 {
 	active = true;
 	player = p;
@@ -156,6 +239,56 @@ void Player_Attack::Activate(GameObject* p, bool f, float time)
 	flip = f;
 	collision.is_blocking = true;
 	life_time = time;
+	a_st = state;
+
+	switch (abi)
+	{
+	case normal:
+		collision.box_size = Vector2D(96.0f, 96.0f);
+		collision.radius = 0.0f;
+		break;
+	case fire:
+		break;
+	case beam:
+		switch (a_st)
+		{
+		case a_normal:
+			collision.box_size = Vector2D(100.0f, 32.0f);
+			collision.radius = 0.0f;
+			if (flip) angle = PI / 180 * 120.0f;
+			else angle =  PI / 180 * 60.0f;
+			break;
+		case a_dash:
+			collision.box_size = Vector2D(32.0f, 96.0f);
+			collision.radius = 0.0f;
+			angle = 0.0f;
+			break;
+		case a_djump:
+			collision.box_size = Vector2D(60.0f, 32.0f);
+			collision.radius = 0.0f;
+			if (flip) angle = PI / 180 * 225.0f;
+			else angle = PI / 180 * 315.0f;
+			break;
+		case a_hold:		
+			collision.box_size = 0.0f;
+			collision.radius = 18.0f;
+			collision.collision_type = eCollisionType::Circle;
+			break;
+		default:
+			break;
+		}
+		break;
+	case sword:
+		break;
+	case star:
+		collision.box_size = 0.0f;
+		collision.radius = 18.0f;
+		collision.collision_type = eCollisionType::Circle;
+		break;
+	default:
+		break;
+	}
+
 }
 
 void Player_Attack::Charge(float time, bool f)
@@ -189,22 +322,6 @@ void Player_Attack::SetAbilityType(Ability ability, Ability_Coltype abicol)
 {
 	abi = ability;
 	a_col = abicol;
-	switch (a_col)
-	{
-	case a_box:
-		collision.box_size = Vector2D(96.0f, 96.0f);
-		collision.radius = 0;
-		collision.collision_type = eCollisionType::Box;
-		break;
-	case a_circle:
-		collision.box_size = 0.0f;
-		collision.radius = 18.0f;
-		collision.collision_type = eCollisionType::Circle;
-		break;
-	default:
-
-		break;
-	}
 }
 
 Ability Player_Attack::GetAbilityType() const

@@ -17,8 +17,8 @@ void Terrain_Base::Initialize()
 void Terrain_Base::Update(float delta_second)
 {
 	Camera* camera = Camera::GetInstance();
-	if (location.x - collision.box_size.x / 2 > camera->GetLocation().x + camera->GetCameraSize().x / 1.5 ||
-		location.x + collision.box_size.x / 2 < camera->GetLocation().x - camera->GetCameraSize().x / 1.5)
+	if (location.x - collision.box_size.x / 2 > camera->GetLocation().x + camera->GetCameraSize().x ||
+		location.x + collision.box_size.x / 2 < camera->GetLocation().x - camera->GetCameraSize().x)
 	{
 		DeActivate();
 	}

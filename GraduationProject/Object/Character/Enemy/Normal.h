@@ -6,7 +6,7 @@
 enum type
 {
 	enormal,
-	mush,
+	mash,
 	piyo,
 	bear,
 	ebeam,

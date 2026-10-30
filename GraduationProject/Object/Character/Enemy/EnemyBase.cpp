@@ -28,6 +28,14 @@ void EnemyBase::Update(float delta_second)
 	{
 		DeActivate();
 	}
+	if (invisible_time > 0.0f)
+	{
+		invisible_time -= delta_second;
+		if (invisible_time <= 0.0f)
+		{
+			invisible_time = 0.0f;
+		}
+	}
 	velocity.y += GRAVITY * delta_second;
 	location += velocity * delta_second * 140.0f;
 }
@@ -69,6 +77,7 @@ void EnemyBase::Activate()
 {
 	location = init_loc;
 	active = true;
+	collision.is_blocking = true;
 }
 
 EnemyType EnemyBase::GetEnemyType() const
@@ -168,15 +177,23 @@ void EnemyBase::OnHitCollision(GameObject* hit_object)
 			break;
 		}
 		default:
-			e_state = e_Damage;
-			Damage(hit_object->GetLocation());
+			if (invisible_time <= 0.0f)
+			{
+				e_state = e_Damage;
+				Damage(hit_object->GetLocation(), 1);
+				invisible_time = 0.5f;
+			}
 			break;
 		}
 	}
 	if (hit_object->GetCollision().object_type == eObjectType::Player)
 	{
-		e_state = e_Damage;
-		Damage(hit_object->GetLocation());
+		if (invisible_time <= 0.0f)
+		{
+			e_state = e_Damage;
+			Damage(hit_object->GetLocation(), 1);
+			invisible_time = 0.5f;
+		}
 	}
 }
 

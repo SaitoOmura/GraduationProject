@@ -17,6 +17,7 @@ void Player::Initialize()
 	collision.radius = 24.0f;
 	dash_period = DASH_DERAY;
 	motion_time = 0.0f;
+	j_vel = 0.0f;
 	warp = false;
 
 	GameObjectManager* gm = GameObjectManager::GetInstance();
@@ -25,7 +26,7 @@ void Player::Initialize()
 		bb.push_back(gm->CreateObject<Player_Attack>(0.0f));
 		bb[i]->Deactivate();
 	}
-	flip = false;
+	flip = true;
 	ac = 0;
 	now_abi = Ability::normal;
 	state = State::idle;
@@ -139,6 +140,9 @@ void Player::Draw(Vector2D c_pos) const
 		break;
 	case sword:
 		color = 0x00ff00;
+		break;
+	case fire:
+		color = 0xff0000;
 		break;
 	default:
 		color = 0x00ff00;
@@ -276,7 +280,7 @@ void Player::OnHitCollision(GameObject* hit_object)
 		{
 			if (invisible_time <= 0.0f)
 			{
-				Damage(hit_object->GetLocation());
+				Damage(hit_object->GetLocation(), 1);
 				state = State::damage;
 				invisible_time = 1.0f;
 			}
@@ -294,6 +298,15 @@ void Player::OnHitCollision(GameObject* hit_object)
 		{
 			gate_id = dynamic_cast<Gate*>(hit_object)->GetGateID();
 			warp = true;
+		}
+	}
+	if (hit_object->GetCollision().object_type == eObjectType::Enemy_Attack)
+	{
+		if (invisible_time <= 0.0f)
+		{
+			Damage(hit_object->GetLocation(), 1);
+			state = State::damage;
+			invisible_time = 1.0f;
 		}
 	}
 }
@@ -405,10 +418,16 @@ void Player::Movement(float delta_second)
 			dash_prep = true;
 			flip = true;
 		}
+		if (dash)
+		{
+			if (input->GetKeyState(KEY_INPUT_D) == eInputState::Hold || input->GetKeyState(KEY_INPUT_A) == eInputState::Hold)
+				velocity.x *= 2;
+		}
 		if (input->GetKeyState(KEY_INPUT_SPACE) == eInputState::Pressed ||
 			input->GetKeyState(KEY_INPUT_W) == eInputState::Pressed)
 		{
 			state = State::jump;
+			j_vel = velocity.x;
 			if (jump) 
 			{
 				if (!hold) 
@@ -440,11 +459,6 @@ void Player::Movement(float delta_second)
 				dash_prep = false;
 				dash = false;
 			}
-		}
-		if (dash)
-		{
-			if (input->GetKeyState(KEY_INPUT_D) == eInputState::Hold || input->GetKeyState(KEY_INPUT_A) == eInputState::Hold)
-				velocity.x *= 2;
 		}
 	}
 	velocity.y += GRAVITY * delta_second;
@@ -485,16 +499,46 @@ void Player::Attack(float delta_second)
 				}
 				else
 				{
-					bb[0]->SetAbilityType(now_abi, Ability_Coltype::a_box);
-					if (flip)
+					if (jump && fabs(j_vel) >= 2.0f)
 					{
-						bb[0]->Activate(this, flip, 0.5f);
+						velocity.y = -3.0f;
+						bb[0]->SetAbilityType(now_abi, Ability_Coltype::a_box);
+						if (flip)
+						{
+							bb[0]->Activate(this, flip, 0.5f, Ability_State::a_djump);
+						}
+						else
+						{
+							bb[0]->Activate(this, flip, 0.5f, Ability_State::a_djump);
+						}
+						motion_time = 1.0f;
 					}
-					else
+					else if (dash)
 					{
-						bb[0]->Activate(this, flip, 0.5f);
+						bb[0]->SetAbilityType(now_abi, Ability_Coltype::a_box);
+						if (flip)
+						{
+							bb[0]->Activate(this, flip, 2.0f, Ability_State::a_dash);
+						}
+						else
+						{
+							bb[0]->Activate(this, flip, 2.0f, Ability_State::a_dash);
+						}
+						motion_time = 2.1f;
 					}
-					motion_time = 1.0f;
+					else 
+					{
+						bb[0]->SetAbilityType(now_abi, Ability_Coltype::a_box);
+						if (flip)
+						{
+							bb[0]->Activate(this, flip, 0.5f, Ability_State::a_normal);
+						}
+						else
+						{
+							bb[0]->Activate(this, flip, 0.5f, Ability_State::a_normal);
+						}
+						motion_time = 1.0f;
+					}
 				}
 				break;
 			default:
@@ -520,11 +564,11 @@ void Player::Attack_Push()
 			bb[1]->SetAbilityType(Ability::star, Ability_Coltype::a_circle);
 			if (flip)
 			{
-				bb[1]->Activate(this, flip, 3.0f);
+				bb[1]->Activate(this, flip, 3.0f, Ability_State::a_normal);
 			}
 			else
 			{
-				bb[1]->Activate(this, flip, 3.0f);
+				bb[1]->Activate(this, flip, 3.0f, Ability_State::a_normal);
 			}
 			bb[1]->Fire();
 			hold = false;
@@ -558,11 +602,11 @@ void Player::Attack_Hold(float delta_second)
 			bb[0]->SetAbilityType(now_abi, Ability_Coltype::a_box);
 			if (flip)
 			{
-				bb[0]->Activate(this, flip, 1.0f);
+				bb[0]->Activate(this, flip, 1.0f, Ability_State::a_hold);
 			}
 			else
 			{
-				bb[0]->Activate(this, flip, 1.0f);
+				bb[0]->Activate(this, flip, 1.0f, Ability_State::a_hold);
 			}
 		}
 		break;
@@ -580,11 +624,11 @@ void Player::Attack_Hold(float delta_second)
 				{
 					if (flip)
 					{
-						bb[i]->Activate(this, flip, 3.0f);
+						bb[i]->Activate(this, flip, 3.0f, Ability_State::a_hold);
 					}
 					else
 					{
-						bb[i]->Activate(this, flip, 3.0f);
+						bb[i]->Activate(this, flip, 3.0f, Ability_State::a_hold);
 					}
 					ac = i;
 					attack = true;
